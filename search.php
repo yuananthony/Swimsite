@@ -81,10 +81,39 @@
 		$newTeamstmt->close();
 	}
 	
-	//STILL NEED TO GET TEAMID
+	
 	if(isset($_POST[ 'SearchTeam' ]) )
 	{
 		$_SESSION[ 'team' ] = $_POST[ 'SelectTeam' ];
+		
+		//SQL to Prepare
+		$findTeamIDSQL = null;
+		$findTeamIDSQL = "SELECT Team.TeamID AS TeamID" .
+							" FROM Team" .
+							" WHERE (Team.HeadCoach = ?) AND (Team.Name = ?)";
+							
+		//Preparing
+		$findTeamIDstmt = $mysqli->prepare( $findTeamIDSQL );
+		
+		//Binding Parameter
+		$findTeamIDstmt->bind_param("is", $_SESSION[ 'user' ], $_SESSION[ 'team' ]);
+		
+		//Execute
+		$findTeamIDstmt->execute();
+		
+		//iterating over results
+		$findTeamIDstmt->bind_result( $teamIDResult );
+		
+		//bug here where fetch() on null
+		while($teamIDResult->fetch())
+		{
+			$_SESSION[ 'teamID' ] = $teamIDResult;
+		}
+		
+		
+		$findTeamIDstmt->free_result();
+		
+		echo $_SESSION[ 'teamID' ];
 		
 		$_SESSION[ 'currentSelection' ] = 'Meets';
 	}
@@ -97,8 +126,7 @@
 	
 	if(isset($_POST[ 'NewMeetSubmit' ]) )
 	{
-		//sql to add new meet
-		
+		//sql to add new meet		
 		$newmeet_Name = $_POST[ 'NewMeetName' ];
 		$newmeet_Date = $_POST[ 'NewMeetDate' ];
 		
@@ -115,10 +143,26 @@
 		
 		//execute
 		$newMeetstmt->execute();
+		//gets value of auto_increment to be used later
+		$newMeetID = mysqli_insert_id();
 		
 		$newMeetstmt->close();
 		
-		//MUST ADD TEAMMEETS SQL LATER
+		//SQL to Prepare
+		$newTeamMeetSQL = null;
+		$newTeamMeetSQL = "INSERT INTO TeamMeets (TMTeamID, TMMeetID)" .
+							" VALUES ( ? , ? )";
+							
+		//Preparing
+		$newTeamMeetstmt = $mysqli->prepare($newTeamMeetSQL);
+		
+		//Binding Parameter
+		$newTeamMeetstmt->bind_param("ii" , $_SESSION[ 'teamID' ], $newMeetID);
+		
+		//execute
+		$newTeamMeetstmt->execute();
+		
+		$newTeamMeetstmt->close();
 		
 	}
 	
