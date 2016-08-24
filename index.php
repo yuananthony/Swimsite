@@ -188,7 +188,12 @@ if( isset($_POST[ 'lsubmit' ]) )
 						while($uidstmt->fetch())
 						{
 							$_SESSION[ 'user' ] = $uidresults;
-							$_SESSION[ 'currentSelection' ] = "None";
+							$_SESSION[ 'currentSelection' ] = "Teams";
+							$_SESSION[ 'teamID' ] = null;
+							$_SESSION[ 'teamName' ] = "None";
+							$_SESSION[ 'meetName' ] = "None";
+							$_SESSION[ 'swimmerName' ] = "None";
+							$_SESSION[ 'eventName' ] = "None";
 						}
 						
 						

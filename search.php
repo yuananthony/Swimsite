@@ -84,7 +84,7 @@
 	
 	if(isset($_POST[ 'SearchTeam' ]) )
 	{
-		$_SESSION[ 'team' ] = $_POST[ 'SelectTeam' ];
+		$_SESSION[ 'teamName' ] = $_POST[ 'SelectTeam' ];
 		
 		//SQL to Prepare
 		$findTeamIDSQL = null;
@@ -96,7 +96,7 @@
 		$findTeamIDstmt = $mysqli->prepare( $findTeamIDSQL );
 		
 		//Binding Parameter
-		$findTeamIDstmt->bind_param("is", $_SESSION[ 'user' ], $_SESSION[ 'team' ]);
+		$findTeamIDstmt->bind_param("is", $_SESSION[ 'user' ], $_SESSION[ 'teamName' ]);
 		
 		//Execute
 		$findTeamIDstmt->execute();
@@ -105,22 +105,18 @@
 		$findTeamIDstmt->bind_result( $teamIDResult );
 		
 		//bug here where fetch() on null
-		while($teamIDResult->fetch())
+		while($findTeamIDstmt->fetch())
 		{
 			$_SESSION[ 'teamID' ] = $teamIDResult;
 		}
 		
-		
 		$findTeamIDstmt->free_result();
-		
-		echo $_SESSION[ 'teamID' ];
 		
 		$_SESSION[ 'currentSelection' ] = 'Meets';
 	}
 	
 	if( isset($_POST[ 'Meets' ]) )
 	{
-		
 		$_SESSION[ 'currentSelection' ] = 'Meets';
 	}
 	
@@ -144,9 +140,11 @@
 		//execute
 		$newMeetstmt->execute();
 		//gets value of auto_increment to be used later
-		$newMeetID = mysqli_insert_id();
+		$newMeetID = mysqli_insert_id($mysqli);
 		
 		$newMeetstmt->close();
+		
+		//SQL to add to TeamMeets
 		
 		//SQL to Prepare
 		$newTeamMeetSQL = null;
@@ -166,6 +164,17 @@
 		
 	}
 	
+	if( isset($_POST[ 'SearchMeet' ]) )
+	{
+		$_SESSION[ 'meetName' ] = $_POST[ 'SelectMeet'];
+		
+		//ADD LATER
+		
+		//SQL to find MeetID
+		
+		//SQL to Prepare
+		$findMeetIDSQL = null;
+	}
 	if( isset($_POST[ 'Swimmers' ]) )
 	{
 		$_SESSION[ 'currentSelection' ] = 'Swimmers';
@@ -345,7 +354,8 @@
 			<section class="bg-primary">
 						<h2>Currently Selected <?php echo $_SESSION[ 'currentSelection' ]; ?> </h2>
 						<hr>
-						<p><strong>Team: <?php echo $_SESSION[ 'team' ] ?> Meet: Swimmer: etc</strong></p>
+						<p><strong>Team: <?php echo $_SESSION[ 'teamName' ] ?> Meet: <?php echo $_SESSION[ 'meetName' ] ?>
+									Swimmer: <?php echo $_SESSION[ 'swimmerName' ] ?> Event: <?php echo $_SESSION[ 'eventName' ] ?></strong></p>
 						<?php
 						//write code to add teams meets etc 
 							if($_SESSION[ 'currentSelection' ] === 'Teams')
@@ -498,6 +508,52 @@
 										</div>
 										<div class = "form-group">
 											<input type="submit" name="SearchTeam" class="btn btn-default" value="Search this team">
+										</div>
+									</form>
+		
+				<?php
+					}
+					else if($_SESSION[ 'currentSelection' ] === 'Meets')
+					{
+					?>
+						<br>
+						<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
+										<div class = "form-group">
+											<label for="selMeet">Select meet to search from:</label>
+											<select class="form-control" id="selMeet" name="SelectMeet">
+												<?php
+												
+													//SQL to Prepare
+													$meetNamesSQL = null;
+													$meetNamesSQL = "SELECT Meets.MName AS Meet_Name" .
+																	" FROM Meets INNER JOIN TeamMeets ON Meets.MeetID = TeamMeets.TMMeetID" .
+																	" WHERE TMTeamID = ?";
+																	
+													//Preparing
+													$meetNamesstmt = $mysqli->prepare($meetNamesSQL);
+													
+													//Binding Parameter
+													$meetNamesstmt->bind_param("i", $_SESSION[ 'teamID' ]);
+													
+													//execute
+													$meetNamesstmt->execute();
+													
+													//iterating over results
+													$meetNamesstmt->bind_result($returnedMeetNames);
+													
+													while($meetNamesstmt->fetch())
+													{
+													
+														echo "<option value=$returnedMeetNames> $returnedMeetNames </option>";
+												
+													}
+													
+													$meetNamesstmt->close();
+												?>
+											</select>
+										</div>
+										<div class = "form-group">
+											<input type="submit" name="SearchMeet" class="btn btn-default" value="Search this meet">
 										</div>
 									</form>
 		
