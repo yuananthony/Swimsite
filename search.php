@@ -104,7 +104,6 @@
 		//iterating over results
 		$findTeamIDstmt->bind_result( $teamIDResult );
 		
-		//bug here where fetch() on null
 		while($findTeamIDstmt->fetch())
 		{
 			$_SESSION[ 'teamID' ] = $teamIDResult;
@@ -168,12 +167,37 @@
 	{
 		$_SESSION[ 'meetName' ] = $_POST[ 'SelectMeet'];
 		
-		//ADD LATER
-		
 		//SQL to find MeetID
 		
 		//SQL to Prepare
 		$findMeetIDSQL = null;
+		$findMeetIDSQL = "SELECT MeetID" .
+							" FROM Meets INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+							" WHERE MName = ? ";
+							
+		//Prepare
+		$findMeetIDstmt = $mysqli->prepare($findMeetIDSQL);;
+		
+		//Binding Parameter
+		$findMeetIDstmt->bind_param("s", $_SESSION[ 'meetName' ]);
+		
+		//execute
+		$findMeetIDstmt->execute();
+		
+		//iterating over results
+		$findMeetIDstmt->bind_result($meetIDResult);
+		
+		while($findMeetIDstmt->fetch())
+		{
+			$_SESSION[ 'meetID' ] = $meetIDResult;
+		}
+		
+		echo $_SESSION[ 'meetID' ];
+		
+		$findMeetIDstmt->close();
+		
+		$_SESSION[ 'currentSelection' ] = "Swimmers";
+		
 	}
 	if( isset($_POST[ 'Swimmers' ]) )
 	{
@@ -373,6 +397,7 @@
 							}
 							else if($_SESSION[ 'currentSelection' ] === 'Meets')
 							{
+								//MAKE SURE USER CAN NOT ADD SAME NAME MEETS
 								echo "Add new Meet:";
 						?>
 								<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
