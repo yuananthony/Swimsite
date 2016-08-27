@@ -192,8 +192,6 @@
 			$_SESSION[ 'meetID' ] = $meetIDResult;
 		}
 		
-		echo $_SESSION[ 'meetID' ];
-		
 		$findMeetIDstmt->close();
 		
 		$_SESSION[ 'currentSelection' ] = "Swimmers";
@@ -224,33 +222,76 @@
 		
 		//execute
 		$newSwimmerstmt->execute();
+		//gets the ID of the swimmer
+		$newSwimmerID = mysqli_insert_id($mysqli);
 		
 		$newSwimmerstmt->close();
 		
-		//MUST ADD SWIMMERTEAMS SQL LATER
+		//SWIMMERTEAMS SQL
+		
+		//SQL to Prepare
+		$newSwimmerTeamsSQL = null;
+		$newSwimmerTeamsSQL = "INSERT INTO SwimmerTeams (STTeamID, STSNID)" .
+								" VALUES ( ? , ? )";
+								
+		//Preparing
+		$newSwimmerTeamsstmt = $mysqli->prepare($newSwimmerTeamsSQL);
+		
+		//Binding Parameter
+		$newSwimmerTeamsstmt->bind_param("ii", $_SESSION[ 'teamID' ], $newSwimmerID);
+		
+		//execute
+		$newSwimmerTeamsstmt->execute();
+		
+		$newSwimmerTeamsstmt->close();
 	}
 	
-	if(isset($_POST[ 'AddSwimmertoTeamsubmit' ]) )
+	if(isset($_POST[ 'AddSwimmersOnTeam' ]) )
 	{
 		$teamToCopyFrom = $_POST[ 'AddSwimmersFromTeam' ];
 		
-		//SQL to Prepare (FIND ALL SWIMMERS TAHT WERE ON THE TEAM) NEED TO FIX THIS LATER
+		//Finding all swimmers on a team
+		//SQL to Prepare 
 		$findSwimmersSQL = null;
-		$findSwimmersSQL = "SELECT Team.TeamID AS TeamID" .
-							" FROM Team" .
-							" WHERE Team.Name = ?";
+		$findSwimmersSQL = "SELECT SwimmerTeams.STSNID" .
+							" FROM SwimmerTeams" .
+							" WHERE SwimmerTeams.STTeamID = (SELECT Team.TeamID AS TeamID" .
+															" FROM Team" .
+															" WHERE (Team.Name = ?) AND (Team.HeadCoach = ?))";
 							
 		//Preparing
 		$findSwimmersstmt = $mysqli->prepare($findSwimmersSQL);
 		
 		//Binding Parameter
-		$findSwimmersstmt->bind_param("s", $teamToCopyFrom);
+		$findSwimmersstmt->bind_param("si", $teamToCopyFrom, $_SESSION[ 'user' ]);
 		
 		//execute
 		$findSwimmersstmt->execute();
 		
-		//iterating over results
-		$findSwimmersstmt->bind_result($copyFromTeamID);
+		//iterating over results of find all swimmers on a team
+		$findSwimmersstmt->bind_result($copySwimmerID);		
+		
+		//Inserting all swimmers from old team to new team
+		//SQL to Prepare
+		$insertSwimmersFromOldToNewSQL = null;
+		$insertSwimmersFromOldToNewSQL = "INSERT INTO SwimmerTeams (STTeamID, STSNID)" .
+										" VALUES ( ? , ? )";
+										
+		//Preparing
+		$insertSwimmersFromOldToNewstmt = $mysqli->prepare($insertSwimmersFromOldToNewSQL);
+		
+		while($findSwimmersstmt->fetch())
+		{
+			//Binding Parameters for inserting all swimmers from old team to new team
+			$insertSwimmersFromOldToNewstmt->bind_param("ii", $_SESSION[ 'teamID' ], $copySwimmerID);
+			
+			//execute inserting swimmer from old team to new team
+			$insertSwimmersFromOldToNewstmt->execute();
+		}
+		
+		//closing the two stmts
+		$findSwimmersstmt->close();
+		$insertSwimmersFromOldToNewstmt->close();
 		
 		
 	}
@@ -476,7 +517,7 @@
 											</select>
 										</div>
 										<div class = "form-group">
-											<input type="submit" name="AllSwimmersOnTeam" class="btn btn-default" value="Add all swimmers from team">
+											<input type="submit" name="AddSwimmersOnTeam" class="btn btn-default" value="Add all swimmers from team">
 										</div>
 									</form>
 						<?php
