@@ -271,6 +271,16 @@
 		//iterating over results of find all swimmers on a team
 		$findSwimmersstmt->bind_result($copySwimmerID);		
 		
+		$swimmerIDArray = array();
+		
+		while($findSwimmersstmt->fetch())
+		{
+			$swimmerIDArray[] = $copySwimmerID;
+		}
+		
+		//closing
+		$findSwimmersstmt->close();
+		
 		//Inserting all swimmers from old team to new team
 		//SQL to Prepare
 		$insertSwimmersFromOldToNewSQL = null;
@@ -280,17 +290,20 @@
 		//Preparing
 		$insertSwimmersFromOldToNewstmt = $mysqli->prepare($insertSwimmersFromOldToNewSQL);
 		
-		while($findSwimmersstmt->fetch())
+		foreach($swimmerIDArray as $copiedSwimmerID)
 		{
-			//Binding Parameters for inserting all swimmers from old team to new team
-			$insertSwimmersFromOldToNewstmt->bind_param("ii", $_SESSION[ 'teamID' ], $copySwimmerID);
 			
+			//Binding Parameters for inserting all swimmers from old team to new team
+			$insertSwimmersFromOldToNewstmt->bind_param("ii", $_SESSION[ 'teamID' ], $copiedSwimmerID);
+				
 			//execute inserting swimmer from old team to new team
 			$insertSwimmersFromOldToNewstmt->execute();
+		
 		}
 		
-		//closing the two stmts
-		$findSwimmersstmt->close();
+		unset($copiedSwimmerID);
+		
+		//closing
 		$insertSwimmersFromOldToNewstmt->close();
 		
 		
