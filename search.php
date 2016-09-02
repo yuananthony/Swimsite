@@ -432,21 +432,25 @@
 			<section class="bg-primary">
 						<h2>Currently Selected <?php echo $_SESSION[ 'currentSelection' ]; ?> </h2>
 						<hr>
-						<p><strong>Team: <?php echo $_SESSION[ 'teamName' ] ?> Meet: <?php echo $_SESSION[ 'meetName' ] ?>
-									Swimmer: <?php echo $_SESSION[ 'swimmerName' ] ?> Event: <?php echo $_SESSION[ 'eventName' ] ?></strong></p>
+						<p class="text-left"><strong>Team: <?php echo $_SESSION[ 'teamName' ] ?></strong><p>
+						<p class="text-left"><strong>Meet: <?php echo $_SESSION[ 'meetName' ] ?></strong><p>
+						<p class="text-left"><strong>Swimmer: <?php echo $_SESSION[ 'swimmerName' ] ?></strong><p>
+						<p class="text-left"><strong>Event: <?php echo $_SESSION[ 'eventName' ] ?></strong></p>
 						<?php
 						//write code to add teams meets etc 
 							if($_SESSION[ 'currentSelection' ] === 'Teams')
 							{
 								echo "Add new Team:";
 						?>
-								<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
-									<div class = "form-group">
-										<label for="teamName"> Team Name:</label>
-										<input type="text" class="form-control" id="newTeamName" name = "NewTeamName" required maxlength = "30">
-									</div>
-									<input type="submit" class="btn btn-default" name="NewTeamSubmit" value="Add New Team">
-								</form>
+								<div class="container center_div">
+									<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
+										<div class = "form-group">
+											<label for="teamName"> Team Name:</label>
+											<input type="text" class="form-control" id="newTeamName" name = "NewTeamName" required maxlength = "30">
+										</div>
+										<input type="submit" class="btn btn-default" name="NewTeamSubmit" value="Add New Team">
+									</form>
+								</div>
 						<?php
 							}
 							else if($_SESSION[ 'currentSelection' ] === 'Meets')
@@ -554,7 +558,17 @@
 							}
 							else if($_SESSION[ 'currentSelection' ] === 'Events')
 							{
-								echo "Select which events will be swimming";
+								if($_SESSION[ 'meetID' ] === null)
+								{
+						?>
+									<h3><strong> Please Select a Team And A Meet Before Adding or Searching Events. </strong></h3>
+						<?php
+								}
+								else
+								{
+									echo "Select which events will be swimming";		
+								}
+
 							}
 						?>
 			</section>
