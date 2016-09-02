@@ -191,8 +191,11 @@ if( isset($_POST[ 'lsubmit' ]) )
 							$_SESSION[ 'currentSelection' ] = "Teams";
 							$_SESSION[ 'teamID' ] = null;
 							$_SESSION[ 'teamName' ] = "None";
+							$_SESSION[ 'meetID' ] = null;
 							$_SESSION[ 'meetName' ] = "None";
+							$_SESSION[ 'swimmerID' ] = null;
 							$_SESSION[ 'swimmerName' ] = "None";
+							$_SESSION[ 'eventID' ] = null;
 							$_SESSION[ 'eventName' ] = "None";
 						}
 						
@@ -284,9 +287,11 @@ if( isset($_POST[ 'lsubmit' ]) )
                     <li>
                         <a class="page-scroll" href="#login">LogIn</a>
                     </li>
+					<!--
                     <li>
                         <a class="page-scroll" href="#contact">Contact</a>
                     </li>
+					-->
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -390,6 +395,7 @@ if( isset($_POST[ 'lsubmit' ]) )
         </div>
     </section>
 	
+	<!--
     <section id="contact">
         <div class="container">
             <div class="row">
@@ -409,6 +415,7 @@ if( isset($_POST[ 'lsubmit' ]) )
             </div>
         </div>
     </section>
+	-->
 
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
