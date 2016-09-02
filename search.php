@@ -451,90 +451,106 @@
 							}
 							else if($_SESSION[ 'currentSelection' ] === 'Meets')
 							{
-								//MAKE SURE USER CAN NOT ADD SAME NAME MEETS
-								echo "Add new Meet:";
+								if($_SESSION[ 'teamID' ] === null)
+								{
 						?>
-								<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
-									<div class = "form-group">
-										<label for="meetName"> Meet Name:</label>
-										<input type="text" class="form-control" id="newMeetName" name = "NewMeetName" required maxlength = "30">
-									</div>
-									<div class = "form-group">
-										<label for="meetDate"> Meet Date:</label>
-										<input type="date" class="form-control" id="newMeetDate" name = "NewMeetDate" required>
-									</div>
-									<input type="submit" class="btn btn-default" name="NewMeetSubmit" value="Add new Meet">
-								</form>
+									<h3> <strong>Please Select A Team Before Adding Or Searching A Meet </strong></h3>
 						<?php
+								}
+								else
+								{								
+									//MAKE SURE USER CAN NOT ADD SAME NAME MEETS
+						?>
+									<p> Add new Meet:<p>
+									<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
+										<div class = "form-group">
+											<label for="meetName"> Meet Name:</label>
+											<input type="text" class="form-control" id="newMeetName" name = "NewMeetName" required maxlength = "30">
+										</div>
+										<div class = "form-group">
+											<label for="meetDate"> Meet Date:</label>
+											<input type="date" class="form-control" id="newMeetDate" name = "NewMeetDate" required>
+										</div>
+										<input type="submit" class="btn btn-default" name="NewMeetSubmit" value="Add new Meet">
+									</form>
+						<?php
+								}
 							}
 							else if($_SESSION[ 'currentSelection' ] === 'Swimmers')
 							{
-									echo "Add new swimmer:";
-									
-						?>									
-									<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
-										<div class = "form-group">
-											<label for="swimmerFirstName"> First Name:</label>
-											<input type="text" class="form-control" id="newSwimmerFirstName" name = "newSwimmerFirstName" required maxlength = "30">
-										</div>
-										<div class = "form-group">
-											<label for="swimmerLastName"> Last Name:</label>
-											<input type="text" class="form-control" id="newSwimmerLastName" name = "newSwimmerLastName" required maxlength = "30">
-										</div>
-										<div class = "form-group">
-											<label for="swimmerAge"> Age:</label>
-											<input type="number" class="form-control" id="newSwimmerAge" name = "newSwimmerAge" min = "1" max = "99">
-										</div>
-										<div class = "form-group">
-											<label for="swimmerYear"> Year:</label>
-											<input type="text" class="form-control" id="newSwimmerYear" name = "newSwimmerYear" maxlength = "20">
-										</div>
-										<button type="submit" name="AddSwimmertoTeamsubmit" class="btn btn-default"> Add Swimmer to Team </button>									
-									</form>
-									
-									<br>
-									
-									<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
-										<div class = "form-group">
-											<label for="selTeam">Select team to copy swimmers from:</label>
-											<select class="form-control" id="selTeam" name="AddSwimmersFromTeam">
-												<?php
-												
-													//SQL to Prepare
-													$teamNamesSQL = null;
-													$teamNamesSQL = "SELECT Team.Name AS Team_Name" .
-																	" FROM Team" .
-																	" WHERE Team.HeadCoach = ?";
-																	
-													//Preparing
-													$teamNamesstmt = $mysqli->prepare($teamNamesSQL);
-													
-													//Binding Parameter
-													$teamNamesstmt->bind_param("i", $_SESSION[ 'user' ]);
-													
-													//execute
-													$teamNamesstmt->execute();
-													
-													//iterating over results
-													$teamNamesstmt->bind_result($returnedTeamNames);
-													
-													while($teamNamesstmt->fetch())
-													{
-													
-														echo "<option value=$returnedTeamNames> $returnedTeamNames </option>";
-												
-													}
-													
-													$teamNamesstmt->free_result();
-												?>
-											</select>
-										</div>
-										<div class = "form-group">
-											<input type="submit" name="AddSwimmersOnTeam" class="btn btn-default" value="Add all swimmers from team">
-										</div>
-									</form>
+									if($_SESSION[ 'teamID' ] === null)
+									{
+						?>
+										<h3><strong> Please Select A Team Before Adding Or Searching Swimmeres </strong></h3>
 						<?php
-								
+									}
+									else
+									{
+						?>			
+										<p> Add new Swimmer: <p>
+										<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
+											<div class = "form-group">
+												<label for="swimmerFirstName"> First Name:</label>
+												<input type="text" class="form-control" id="newSwimmerFirstName" name = "newSwimmerFirstName" required maxlength = "30">
+											</div>
+											<div class = "form-group">
+												<label for="swimmerLastName"> Last Name:</label>
+												<input type="text" class="form-control" id="newSwimmerLastName" name = "newSwimmerLastName" required maxlength = "30">
+											</div>
+											<div class = "form-group">
+												<label for="swimmerAge"> Age:</label>
+												<input type="number" class="form-control" id="newSwimmerAge" name = "newSwimmerAge" min = "1" max = "99">
+											</div>
+											<div class = "form-group">
+												<label for="swimmerYear"> Year:</label>
+												<input type="text" class="form-control" id="newSwimmerYear" name = "newSwimmerYear" maxlength = "20">
+											</div>
+											<button type="submit" name="AddSwimmertoTeamsubmit" class="btn btn-default"> Add Swimmer to Team </button>									
+										</form>
+										
+										<br>
+										
+										<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
+											<div class = "form-group">
+												<label for="selTeam">Select team to copy swimmers from:</label>
+												<select class="form-control" id="selTeam" name="AddSwimmersFromTeam">
+													<?php
+													
+														//SQL to Prepare
+														$teamNamesSQL = null;
+														$teamNamesSQL = "SELECT Team.Name AS Team_Name" .
+																		" FROM Team" .
+																		" WHERE Team.HeadCoach = ?";
+																		
+														//Preparing
+														$teamNamesstmt = $mysqli->prepare($teamNamesSQL);
+														
+														//Binding Parameter
+														$teamNamesstmt->bind_param("i", $_SESSION[ 'user' ]);
+														
+														//execute
+														$teamNamesstmt->execute();
+														
+														//iterating over results
+														$teamNamesstmt->bind_result($returnedTeamNames);
+														
+														while($teamNamesstmt->fetch())
+														{
+														
+															echo "<option value=$returnedTeamNames> $returnedTeamNames </option>";
+													
+														}
+														
+														$teamNamesstmt->free_result();
+													?>
+												</select>
+											</div>
+											<div class = "form-group">
+												<input type="submit" name="AddSwimmersOnTeam" class="btn btn-default" value="Add all swimmers from team">
+											</div>
+										</form>
+						<?php
+									}
 							}
 							else if($_SESSION[ 'currentSelection' ] === 'Events')
 							{
@@ -594,49 +610,55 @@
 					}
 					else if($_SESSION[ 'currentSelection' ] === 'Meets')
 					{
+						
+						if($_SESSION[ 'teamID' ] !== null)
+						{
 					?>
-						<br>
-						<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
-										<div class = "form-group">
-											<label for="selMeet">Select meet to search from:</label>
-											<select class="form-control" id="selMeet" name="SelectMeet">
-												<?php
-												
-													//SQL to Prepare
-													$meetNamesSQL = null;
-													$meetNamesSQL = "SELECT Meets.MName AS Meet_Name" .
-																	" FROM Meets INNER JOIN TeamMeets ON Meets.MeetID = TeamMeets.TMMeetID" .
-																	" WHERE TMTeamID = ?";
-																	
-													//Preparing
-													$meetNamesstmt = $mysqli->prepare($meetNamesSQL);
+							<br>
+							<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
+											<div class = "form-group">
+												<label for="selMeet">Select meet to search from:</label>
+												<select class="form-control" id="selMeet" name="SelectMeet">
+													<?php
 													
-													//Binding Parameter
-													$meetNamesstmt->bind_param("i", $_SESSION[ 'teamID' ]);
+														//SQL to Prepare
+														$meetNamesSQL = null;
+														$meetNamesSQL = "SELECT Meets.MName AS Meet_Name" .
+																		" FROM Meets INNER JOIN TeamMeets ON Meets.MeetID = TeamMeets.TMMeetID" .
+																		" WHERE TMTeamID = ?";
+																		
+														//Preparing
+														$meetNamesstmt = $mysqli->prepare($meetNamesSQL);
+														
+														//Binding Parameter
+														$meetNamesstmt->bind_param("i", $_SESSION[ 'teamID' ]);
+														
+														//execute
+														$meetNamesstmt->execute();
+														
+														//iterating over results
+														$meetNamesstmt->bind_result($returnedMeetNames);
+														
+														while($meetNamesstmt->fetch())
+														{
+														
+															echo "<option value=$returnedMeetNames> $returnedMeetNames </option>";
 													
-													//execute
-													$meetNamesstmt->execute();
-													
-													//iterating over results
-													$meetNamesstmt->bind_result($returnedMeetNames);
-													
-													while($meetNamesstmt->fetch())
-													{
-													
-														echo "<option value=$returnedMeetNames> $returnedMeetNames </option>";
-												
-													}
-													
-													$meetNamesstmt->close();
-												?>
-											</select>
-										</div>
-										<div class = "form-group">
-											<input type="submit" name="SearchMeet" class="btn btn-default" value="Search this meet">
-										</div>
-									</form>
-		
+														}
+														
+														$meetNamesstmt->close();
+														
+														//may want to have a button for all meets to search
+													?>
+												</select>
+											</div>
+											<div class = "form-group">
+												<input type="submit" name="SearchMeet" class="btn btn-default" value="Search this meet">
+											</div>
+										</form>
+			
 				<?php
+						}
 					}
 				?>
 			<section>
