@@ -84,32 +84,12 @@
 	
 	if(isset($_POST[ 'SearchTeam' ]) )
 	{
-		$_SESSION[ 'teamName' ] = $_POST[ 'SelectTeam' ];
+		$teamResult = $_POST[ 'SelectTeam' ];
 		
-		//SQL to Prepare
-		$findTeamIDSQL = null;
-		$findTeamIDSQL = "SELECT Team.TeamID AS TeamID" .
-							" FROM Team" .
-							" WHERE (Team.HeadCoach = ?) AND (Team.Name = ?)";
-							
-		//Preparing
-		$findTeamIDstmt = $mysqli->prepare( $findTeamIDSQL );
+		$teamResult_explode = explode('|', $teamResult);
 		
-		//Binding Parameter
-		$findTeamIDstmt->bind_param("is", $_SESSION[ 'user' ], $_SESSION[ 'teamName' ]);
-		
-		//Execute
-		$findTeamIDstmt->execute();
-		
-		//iterating over results
-		$findTeamIDstmt->bind_result( $teamIDResult );
-		
-		while($findTeamIDstmt->fetch())
-		{
-			$_SESSION[ 'teamID' ] = $teamIDResult;
-		}
-		
-		$findTeamIDstmt->free_result();
+		$_SESSION[ 'teamName'] = $teamResult_explode[1];
+		$_SESSION[ 'teamID' ] = $teamResult_explode[0];
 		
 		$_SESSION[ 'currentSelection' ] = 'Meets';
 	}
@@ -165,34 +145,12 @@
 	
 	if( isset($_POST[ 'SearchMeet' ]) )
 	{
-		$_SESSION[ 'meetName' ] = $_POST[ 'SelectMeet'];
+		$meetResult = $_POST[ 'SelectMeet'];
 		
-		//SQL to find MeetID
+		$meetResult_explode = explode('|', $meetResult);
 		
-		//SQL to Prepare
-		$findMeetIDSQL = null;
-		$findMeetIDSQL = "SELECT MeetID" .
-							" FROM Meets INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
-							" WHERE MName = ? ";
-							
-		//Prepare
-		$findMeetIDstmt = $mysqli->prepare($findMeetIDSQL);;
-		
-		//Binding Parameter
-		$findMeetIDstmt->bind_param("s", $_SESSION[ 'meetName' ]);
-		
-		//execute
-		$findMeetIDstmt->execute();
-		
-		//iterating over results
-		$findMeetIDstmt->bind_result($meetIDResult);
-		
-		while($findMeetIDstmt->fetch())
-		{
-			$_SESSION[ 'meetID' ] = $meetIDResult;
-		}
-		
-		$findMeetIDstmt->close();
+		$_SESSION[ 'meetName' ] = $meetResult_explode[0];
+		$_SESSION[ 'meetID' ] = $meetResult_explode[1];
 		
 		$_SESSION[ 'currentSelection' ] = "Swimmers";
 		
@@ -248,22 +206,21 @@
 	
 	if(isset($_POST[ 'AddSwimmersOnTeam' ]) )
 	{
-		$teamToCopyFrom = $_POST[ 'AddSwimmersFromTeam' ];
+		$teamIDToCopyFrom = $_POST[ 'AddSwimmersFromTeam' ];
 		
+		echo $teamIDToCopyFrom;
 		//Finding all swimmers on a team
 		//SQL to Prepare 
 		$findSwimmersSQL = null;
 		$findSwimmersSQL = "SELECT SwimmerTeams.STSNID" .
 							" FROM SwimmerTeams" .
-							" WHERE SwimmerTeams.STTeamID = (SELECT Team.TeamID AS TeamID" .
-															" FROM Team" .
-															" WHERE (Team.Name = ?) AND (Team.HeadCoach = ?))";
+							" WHERE SwimmerTeams.STTeamID = ? ";
 							
 		//Preparing
 		$findSwimmersstmt = $mysqli->prepare($findSwimmersSQL);
 		
 		//Binding Parameter
-		$findSwimmersstmt->bind_param("si", $teamToCopyFrom, $_SESSION[ 'user' ]);
+		$findSwimmersstmt->bind_param("i", $teamIDToCopyFrom);
 		
 		//execute
 		$findSwimmersstmt->execute();
@@ -293,10 +250,10 @@
 		foreach($swimmerIDArray as $copiedSwimmerID)
 		{
 			
-			//Binding Parameters for inserting all swimmers from old team to new team
+			//Binding Parameters for inserting all swimmers from old team to current team
 			$insertSwimmersFromOldToNewstmt->bind_param("ii", $_SESSION[ 'teamID' ], $copiedSwimmerID);
 				
-			//execute inserting swimmer from old team to new team
+			//execute inserting swimmer from old team to current team
 			$insertSwimmersFromOldToNewstmt->execute();
 		
 		}
@@ -307,6 +264,18 @@
 		$insertSwimmersFromOldToNewstmt->close();
 		
 		
+	}
+	
+	if( isset($_POST[ 'SearchSwimmer' ]) )
+	{
+		$swimmerResult = $_POST[ 'SelectSwimmer'];
+		
+		$swimmerResult_explode = explode('|', $swimmerResult);
+		
+		$_SESSION[ 'swimmerName' ] = $swimmerResult_explode[0];
+		$_SESSION[ 'swimmerID' ] = $swimmerResult_explode[1];
+		
+		$_SESSION[ 'currentSelection' ] = "Events";
 	}
 	if( isset($_POST[ 'Events' ]) )
 	{
@@ -522,7 +491,7 @@
 													
 														//SQL to Prepare
 														$teamNamesSQL = null;
-														$teamNamesSQL = "SELECT Team.Name AS Team_Name" .
+														$teamNamesSQL = "SELECT Team.Name AS Team_Name, Team.TeamID AS Team_ID" .
 																		" FROM Team" .
 																		" WHERE Team.HeadCoach = ?";
 																		
@@ -536,13 +505,13 @@
 														$teamNamesstmt->execute();
 														
 														//iterating over results
-														$teamNamesstmt->bind_result($returnedTeamNames);
+														$teamNamesstmt->bind_result($returnedTeamNames, $returnedTeamIDs);
 														
 														while($teamNamesstmt->fetch())
 														{
-														
-															echo "<option value=$returnedTeamNames> $returnedTeamNames </option>";
 													
+															echo "<option value=$returnedTeamIDs> $returnedTeamNames </option>";
+															
 														}
 														
 														$teamNamesstmt->free_result();
@@ -588,7 +557,7 @@
 												
 													//SQL to Prepare
 													$teamNamesSQL = null;
-													$teamNamesSQL = "SELECT Team.Name AS Team_Name" .
+													$teamNamesSQL = "SELECT Team.Name AS Team_Name, Team.TeamID AS Team_ID" .
 																	" FROM Team" .
 																	" WHERE Team.HeadCoach = ?";
 																	
@@ -602,12 +571,12 @@
 													$teamNamesstmt->execute();
 													
 													//iterating over results
-													$teamNamesstmt->bind_result($returnedTeamNames);
+													$teamNamesstmt->bind_result($returnedTeamNames, $returnedTeamID);
 													
 													while($teamNamesstmt->fetch())
 													{
 													
-														echo "<option value=$returnedTeamNames> $returnedTeamNames </option>";
+														echo "<option value=$returnedTeamID|$returnedTeamNames> $returnedTeamNames </option>";
 												
 													}
 													
@@ -630,47 +599,95 @@
 					?>
 							<br>
 							<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
-											<div class = "form-group">
-												<label for="selMeet">Select meet to search from:</label>
-												<select class="form-control" id="selMeet" name="SelectMeet">
-													<?php
+								<div class = "form-group">
+									<label for="selMeet">Select meet to search from:</label>
+										<select class="form-control" id="selMeet" name="SelectMeet">
+					<?php
 													
-														//SQL to Prepare
-														$meetNamesSQL = null;
-														$meetNamesSQL = "SELECT Meets.MName AS Meet_Name" .
-																		" FROM Meets INNER JOIN TeamMeets ON Meets.MeetID = TeamMeets.TMMeetID" .
-																		" WHERE TMTeamID = ?";
+										//SQL to Prepare
+										$meetNamesSQL = null;
+										$meetNamesSQL = "SELECT Meets.MName AS Meet_Name, Meets.MeetID AS Meet_ID" .
+														" FROM Meets INNER JOIN TeamMeets ON Meets.MeetID = TeamMeets.TMMeetID" .
+														" WHERE TMTeamID = ?";
 																		
-														//Preparing
-														$meetNamesstmt = $mysqli->prepare($meetNamesSQL);
+										//Preparing
+										$meetNamesstmt = $mysqli->prepare($meetNamesSQL);
 														
-														//Binding Parameter
-														$meetNamesstmt->bind_param("i", $_SESSION[ 'teamID' ]);
+										//Binding Parameter
+										$meetNamesstmt->bind_param("i", $_SESSION[ 'teamID' ]);
 														
-														//execute
-														$meetNamesstmt->execute();
+										//execute
+										$meetNamesstmt->execute();
 														
-														//iterating over results
-														$meetNamesstmt->bind_result($returnedMeetNames);
+										//iterating over results
+										$meetNamesstmt->bind_result($returnedMeetNames, $returnedMeetID);
 														
-														while($meetNamesstmt->fetch())
-														{
+										while($meetNamesstmt->fetch())
+										{
 														
-															echo "<option value=$returnedMeetNames> $returnedMeetNames </option>";
+											echo "<option value=$returnedMeetNames|$returnedMeetID> $returnedMeetNames </option>";
 													
-														}
+										}
 														
-														$meetNamesstmt->close();
+										$meetNamesstmt->close();
 														
-														//may want to have a button for all meets to search
-													?>
-												</select>
-											</div>
-											<div class = "form-group">
-												<input type="submit" name="SearchMeet" class="btn btn-default" value="Search this meet">
-											</div>
-										</form>
+										//may want to have a button for all meets to search
+					?>
+										</select>
+								</div>
+										<div class = "form-group">
+											<input type="submit" name="SearchMeet" class="btn btn-default" value="Search this meet">
+										</div>
+							</form>
 			
+				<?php
+						}
+					}
+					else if($_SESSION[ 'currentSelection' ] === 'Swimmers')
+					{
+						if($_SESSION[ 'teamID' ] !== null)
+						{
+				?>
+							<br>
+							<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
+								<div class = "form-group">
+									<label for="selSwimmer">Select swimmer to search from:</label>
+										<select class="form-control" id="selSwimmer" name="SelectSwimmer">
+				<?php
+										//SQL to Prepare
+										$swimmersNamesSQL = null;
+										$swimmersNamesSQL = "SELECT Swimmers.SFName AS SwimmerFirstName, Swimmers.SLName AS SwimmerLastName, Swimmers.SNID AS SwimmerID" .
+															" FROM Swimmers INNER JOIN SwimmerTeams ON Swimmers.SNID = SwimmerTeams.STSNID" .
+															" WHERE SwimmerTeams.STTeamID = ?";
+															
+										//Preparing
+										$swimmerNamesstmt = $mysqli->prepare($swimmersNamesSQL);
+										
+										//Binding Parameter
+										$swimmerNamesstmt->bind_param("i", $_SESSION[ 'teamID' ]);
+										
+										//execute
+										$swimmerNamesstmt->execute();
+										
+										//iterating over results
+										$swimmerNamesstmt->bind_result($returnedSwimmerFirstName, $returnedSwimmerLastName, $returnedSwimmerID);
+										
+										while($swimmerNamesstmt->fetch())
+										{
+											echo "<option value=$returnedSwimmerFirstName$returnedSwimmerLastName|$returnedSwimmerID> $returnedSwimmerFirstName$returnedSwimmerLastName </option>";
+										}
+										
+										$swimmerNamesstmt->close();
+										
+										//may want to have a button for all swimmers to search
+										//MAY WANT TO ADD A HIDDEN FIELD FOR THE ID (for all searches?)
+				?>
+										</select>
+								</div>
+										<div class ="form-group">
+											<input type="submit" name="SearchSwimmer" class="btn btn-default" value="Search this swimmer">
+										</div>
+							</form>
 				<?php
 						}
 					}
