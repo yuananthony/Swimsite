@@ -90,6 +90,12 @@
 		
 		$_SESSION[ 'teamName'] = $teamResult_explode[1];
 		$_SESSION[ 'teamID' ] = $teamResult_explode[0];
+		$_SESSION[ 'meetID' ] = null;
+		$_SESSION[ 'meetName' ] = "None";
+		$_SESSION[ 'swimmerID' ] = null;
+		$_SESSION[ 'swimmerName' ] = "None";
+		$_SESSION[ 'eventID' ] = null;
+		$_SESSION[ 'eventName' ] = "None";
 		
 		$_SESSION[ 'currentSelection' ] = 'Meets';
 	}
@@ -151,9 +157,20 @@
 		
 		$_SESSION[ 'meetName' ] = $meetResult_explode[0];
 		$_SESSION[ 'meetID' ] = $meetResult_explode[1];
+		$_SESSION[ 'swimmerID' ] = null;
+		$_SESSION[ 'swimmerName' ] = "None";
+		$_SESSION[ 'eventID' ] = null;
+		$_SESSION[ 'eventName' ] = "None";
 		
 		$_SESSION[ 'currentSelection' ] = "Swimmers";
 		
+	}
+	
+	if( isset($_POST[ 'SearchAllMeets' ]) )
+	{
+		//write SQL to get all meet IDs and put it into an array
+		
+		$_SESSION[ 'currentSelection' ] = "Swimmers";
 	}
 	if( isset($_POST[ 'Swimmers' ]) )
 	{
@@ -274,8 +291,15 @@
 		
 		$_SESSION[ 'swimmerName' ] = $swimmerResult_explode[0];
 		$_SESSION[ 'swimmerID' ] = $swimmerResult_explode[1];
+		$_SESSION[ 'eventID' ] = null;
+		$_SESSION[ 'eventName' ] = "None";
 		
 		$_SESSION[ 'currentSelection' ] = "Events";
+	}
+	
+	if( isset($_POST[ 'SearchAllSwimmeres' ]) )
+	{
+		$_SESSION[ 'currentSelection' ] = "Eventts";
 	}
 	if( isset($_POST[ 'Events' ]) )
 	{
@@ -639,6 +663,8 @@
 											<input type="submit" name="SearchMeet" class="btn btn-default" value="Search this meet">
 										</div>
 							</form>
+							
+							<input type="submit" name="SearchAllMeets" class="btn btn-default" value="Search All Meets">
 			
 				<?php
 						}
@@ -680,7 +706,6 @@
 										$swimmerNamesstmt->close();
 										
 										//may want to have a button for all swimmers to search
-										//MAY WANT TO ADD A HIDDEN FIELD FOR THE ID (for all searches?)
 				?>
 										</select>
 								</div>
@@ -688,9 +713,27 @@
 											<input type="submit" name="SearchSwimmer" class="btn btn-default" value="Search this swimmer">
 										</div>
 							</form>
+							
+							<input type="submit" name="SearchAllSwimmers" class="btn btn-default" value="Search All Swimmers">
 				<?php
 						}
 					}
+					else if($_SESSION[ 'currentSelection' ] === 'Events')
+					{
+						if(($_SESSION[ 'meetID' ] !== null) && ($_SESSION[ 'swimmerID' ] === null))
+						{
+							//sql to find all events in the meet
+						}
+						else if(($_SESSION[ 'meetID' ] !== null)  && ($_SESSION[ 'swimmerID' ] !== null))
+						{
+							//sql to find all events that a swimmer swam in a meet
+						}
+						else if(($_SESSION[ 'meetID' ] === null) && ($_SESSION[ 'swimmerID' ] !== null))
+						{
+							//sql to find all events that a swimmer on a team has swam
+						}
+					}
+					
 				?>
 			<section>
 				<div class="container">
