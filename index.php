@@ -1,30 +1,30 @@
-<?php 
+<?php
 	//db variables
 	define( 'DB_SERVER', 'localhost' );
 	define( 'DB_USER',   'root' );
-	define( 'DB_PW',	 '' );
+	define( 'DB_PW',	 'root' );
 	define( 'DB_NAME',   'swimming' );
-	
+
 	//registration variables
 	$isAccountCreated = null;
 	$isUsernameAvailable = null;
 	$ruser_Name = null;
 	$passwordMatch = null;
 	$usernameMatch = null;
-			
+
 	function cryptPass($input, $rounds = 14)
 	{
 		$salt = "";
 		$saltChars = array_merge(range('A','Z'), range('a','z'), range(0,9));
-		
+
 		for($i = 0; $i < 22; $i++)
 		{
 			$salt .= $saltChars[array_rand($saltChars)];
 		}
-		
+
 		return crypt($input, sprintf('$2y$%02d$', $rounds) . $salt);
 	}
-	
+
 	session_start();
 
 	//DB Connection
@@ -32,8 +32,8 @@
 	//change before putting website up
 	error_reporting( E_ALL );
 	mysqli_report( MYSQLI_REPORT_STRICT );
-		
-	try 
+
+	try
 	{
 		$mysqli = new mysqli( DB_SERVER, DB_USER, DB_PW, DB_NAME );
 		$connected = true;
@@ -42,16 +42,16 @@
 	{
 		$connected = false;
 	}
-					
+
 	//Character Set UTF-8
 	if($connected)
 	{
 		if (!$mysqli->set_charset('utf8'))
 		{
 			$connected = false;
-		} 
+		}
 	}
-	
+
 //may want to validate email and make sure only one is used/unique(not sure what to do yet)
 //may help later
 //fixed problem with $_POST used ' for variables because none of them are defined as global variables and changed the name in input to be just the rusername and stuff
@@ -72,51 +72,51 @@ if( isset($_POST[ 'rsubmit' ]) )
 
 				//Preparing
 				$rstmt = $mysqli->prepare( $rsql );
-				
+
 				//binding parameter
 				$rstmt->bind_param( "s", $ruser_Name);
-				
+
 				//execute
 				$rstmt->execute();
-				
+
 				//bind results
 				$unresults = null;
 				$rstmt->bind_result($unresults);
-				
+
 				//store results to get properties
 				$rstmt->store_result();
-				
+
 				//variable for username availability
 				$isUsernameAvailable = $rstmt->num_rows === 0;
-				
+
 				//free results
 				$rstmt->free_result();
-				
-				//checks if the sql returns anything									
-				if($isUsernameAvailable) 
+
+				//checks if the sql returns anything
+				if($isUsernameAvailable)
 				{
 					$hasedPass = cryptPass($r_Password);
-					
+
 					//write sql to create username and password
 					$isql = null;
 					$isql = "INSERT INTO users (Username, Password, Email)" .
 							" VALUES ( ? , ? , ? )";
-					
+
 					//preparing
 					$istmt = $mysqli->prepare( $isql );
-					
+
 					//binding parameter
 					$istmt->bind_param( "sss", $ruser_Name, $hasedPass, $remail);
-					
+
 					//execute
 					$istmt->execute();
-					
+
 					$istmt->close();
-					
+
 					$isAccountCreated = TRUE;
 				}
 			}
-				
+
 }
 
 if( isset($_POST[ 'lsubmit' ]) )
@@ -126,65 +126,65 @@ if( isset($_POST[ 'lsubmit' ]) )
 		{
 			$user_Name = $_POST[ 'user_Name' ];
 			$password = $_POST[ 'password' ];
-										
+
 			//SQL to Prepare
-										
+
 			$sql = null;
 			$sql = 'SELECT Users.Password AS Password' .
 					' FROM Users' .
 					' WHERE Users.Username = ?';
-												
-			//Preparing 
+
+			//Preparing
 			$stmt = $mysqli->prepare( $sql );
-									
+
 			//binding parameter
 			$stmt->bind_param( "s", $user_Name) ;
-										
+
 			//execute
 			$stmt->execute();
-										
-			//bind results 
+
+			//bind results
 			$pwresults = null;
 			$stmt->bind_result($pwresults);
-										
+
 			//store results to get properties
 			$stmt->store_result();
-			
+
 			//checks if anything was returned
 			if($stmt->num_rows === 1)
 			{
-				
+
 				while($stmt->fetch())
 				{
-					
+
 					//checking password
 					if(crypt($password, $pwresults) === $pwresults)
 					{
 						//get UID for later sql
-						
+
 						//SQL to Prepare
-						
+
 						$uidsql = null;
 						$uidsql = 'SELECT Users.UID AS UserID' .
 									' FROM Users' .
 									' WHERE Users.Username = ?';
-									
+
 						//Preparing
 						$uidstmt = $mysqli->prepare( $uidsql );
-						
+
 						//Binding Parameter
 						$uidstmt->bind_param("s", $user_Name) ;
-						
+
 						//execute
 						$uidstmt->execute();
-						
+
 						//bind results
 						$uidresults = null;
 						$uidstmt->bind_result($uidresults);
-						
+
 						//store results to get properties
 						$uidstmt->store_result();
-						
+
 						while($uidstmt->fetch())
 						{
 							$_SESSION[ 'user' ] = $uidresults;
@@ -198,10 +198,10 @@ if( isset($_POST[ 'lsubmit' ]) )
 							$_SESSION[ 'eventID' ] = null;
 							$_SESSION[ 'eventName' ] = "None";
 						}
-						
-						
+
+
 						header('Location: search.php');
-						
+
 						$passwordMatch = TRUE;
 						//echo "Loged in as " . $_SESSION[ 'user' ];
 					}
@@ -211,14 +211,14 @@ if( isset($_POST[ 'lsubmit' ]) )
 						//echo "Password does not match";
 					}
 				}
-			
+
 			}
 			else
 			{
 				$usernameMatch = FALSE;
 				//echo "This username does not exist please try again";
 			}
-			
+
 			$stmt->free_result();
 		}
 }
@@ -349,7 +349,7 @@ if( isset($_POST[ 'lsubmit' ]) )
             </div>
         </div>
     </section>
-	
+
     <section id="about">
         <div class="container">
             <div class="row">
@@ -361,7 +361,7 @@ if( isset($_POST[ 'lsubmit' ]) )
             </div>
         </div>
     </section>
-				
+
 	<section class="bg-primary" id="login">
         <div class="container">
             <div class="row">
@@ -394,7 +394,7 @@ if( isset($_POST[ 'lsubmit' ]) )
             </div>
         </div>
     </section>
-	
+
 	<!--
     <section id="contact">
         <div class="container">

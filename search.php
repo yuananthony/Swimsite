@@ -2,7 +2,7 @@
 	//db variables
 	define( 'DB_SERVER', 'localhost' );
 	define( 'DB_USER',   'root' );
-	define( 'DB_PW',	 '' );
+	define( 'DB_PW',	 'root' );
 	define( 'DB_NAME',   'swimming' );
 	/*NOTES TO SELF:
 		Use $_SESSION variables to avoid variables changing
@@ -42,7 +42,7 @@
 	{
 		header('Location: index.php');
 	}
-	
+
 
 	if( isset($_POST[ 'Teams' ]) )
 	{
@@ -292,12 +292,21 @@
 
 	if( isset($_POST[ 'SearchAllSwimmeres' ]) )
 	{
-		$_SESSION[ 'currentSelection' ] = "Eventts";
+		$_SESSION[ 'currentSelection' ] = "Events";
 	}
 	if( isset($_POST[ 'Events' ]) )
 	{
-
 		$_SESSION[ 'currentSelection' ] = 'Events';
+	}
+
+	if(isset($_POST[ 'AddEvent' ]) )
+	{
+		$meetToCreate = $_POST[ 'selectEvent' ];
+		$laneToAdd = $_POST[ 'newEventLane' ];
+		$swimmerIDToSwim = $_POST[ 'selectSwimmerForEvent' ];
+
+		//NEED TO WRITE SQL TO ADD MEET THEN GET ID THEN ADD SWIMMEREVENT AND EVENTMEET
+
 	}
 
 	if( isset($_POST[ 'Results' ]) )
@@ -418,16 +427,16 @@
 			<section class="bg-primary">
 						<h2>Currently Selected <?php echo $_SESSION[ 'currentSelection' ]; ?> </h2>
 						<hr>
-						<p class="text-left"><strong>Team: <?php echo $_SESSION[ 'teamName' ] ?></strong><p>
-						<p class="text-left"><strong>Meet: <?php echo $_SESSION[ 'meetName' ] ?></strong><p>
-						<p class="text-left"><strong>Swimmer: <?php echo $_SESSION[ 'swimmerName' ] ?></strong><p>
+						<p class="text-left"><strong>Team: <?php echo $_SESSION[ 'teamName' ] ?></strong></p>
+						<p class="text-left"><strong>Meet: <?php echo $_SESSION[ 'meetName' ] ?></strong></p>
+						<p class="text-left"><strong>Swimmer: <?php echo $_SESSION[ 'swimmerName' ] ?></strong></p>
 						<p class="text-left"><strong>Event: <?php echo $_SESSION[ 'eventName' ] ?></strong></p>
 						<?php
 						//write code to add teams meets etc
 							if($_SESSION[ 'currentSelection' ] === 'Teams')
 							{
-								echo "Add new Team:";
 						?>
+							<p>Add new Team</p>
 								<div class="container center_div">
 									<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
 										<div class = "form-group">
@@ -451,7 +460,7 @@
 								{
 									//MAKE SURE USER CAN NOT ADD SAME NAME MEETS
 						?>
-									<p> Add new Meet:<p>
+									<p> Add new Meet:</p>
 									<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
 										<div class = "form-group">
 											<label for="meetName"> Meet Name:</label>
@@ -477,7 +486,7 @@
 									else
 									{
 						?>
-										<p> Add new Swimmer: <p>
+										<p> Add new Swimmer: </p>
 										<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
 											<div class = "form-group">
 												<label for="swimmerFirstName"> First Name:</label>
@@ -552,13 +561,75 @@
 								}
 								else
 								{
-									echo "Select which events will be swimming";
+						?>
+								<p>Add what event and lane a swimmer will be swimming in</p>
+								<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
+									<div class = "form-group">
+										<label for="selEvent">Select event:</label>
+										<select class="form-control" id="selEvent" name="selectEvent">
+											<option value = "50Free"> 50 Free </option>
+											<option value = "100Free"> 100 Free </option>
+											<option value = "200Free"> 200 Free </option>
+											<option value = "500Free"> 500 Free </option>
+											<option value = "100Fly"> 100 Fly </option>
+											<option value = "100Breast"> 100 Breast </option>
+											<option value = "100Back"> 100 Back </option>
+											<option value = "200IM"> 200 IM </option>
+											<option value = "25Free"> 25 Free </option>
+											<option value = "25Fly"> 25 Fly </option>
+											<option value = "25Back"> 25 Back </option>
+											<option value = "25Breast"> 25 Breast </option>
+											<option value = "100IM"> 100 IM </option>
+										</select>
+									</div>
+									<div class = "form-group">
+										<label for="selLane">Select lane:</label>
+										<input type="number" class="form-control" id="selLane" name = "newEventLane" min = "1" max = "12">
+									</div>
+									<div class = "form-group">
+										<label for="selSwimmerForEvent">Select swimmer:</label>
+										<select class="form-control" id="selSwimmerForEvent" name="selectSwimmerForEvent">
+											<?php
+												//SQL to Prepare
+												$swimmersNamesSQL = null;
+												$swimmersNamesSQL = "SELECT Swimmers.SFName AS SwimmerFirstName, Swimmers.SLName AS SwimmerLastName, Swimmers.SNID AS SwimmerID" .
+																						" FROM Swimmers INNER JOIN SwimmerTeams ON Swimmers.SNID = SwimmerTeams.STSNID" .
+																						" WHERE SwimmerTeams.STTeamID = ?";
+
+												//Preparing
+												$swimmerNamesstmt = $mysqli->prepare($swimmersNamesSQL);
+
+												//Binding Parameter
+												$swimmerNamesstmt->bind_param("i", $_SESSION[ 'teamID' ]);
+
+												//execute
+												$swimmerNamesstmt->execute();
+
+												//iterating over results
+												$swimmerNamesstmt->bind_result($returnedSwimmerFirstName, $returnedSwimmerLastName, $returnedSwimmerID);
+
+												while($swimmerNamesstmt->fetch())
+												{
+													echo "<option value=$returnedSwimmerID> $returnedSwimmerFirstName$returnedSwimmerLastName </option>";
+												}
+
+												$swimmerNamesstmt->close();
+
+												//may want to have a button for all swimmers to search
+											?>
+										</select>
+									<div class = "form-group">
+										<input type="submit" name="AddEvent" class="btn btn-default" value="Add Event">
+									</div>
+								</form>
+						<?php
 								}
 
 							}
 						?>
 			</section>
 
+			<!--END OF ADD SECTION-->
 			<!--this is going to be the body of the page with all the results-->
 
 				<?php
