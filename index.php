@@ -11,6 +11,7 @@
 	$ruser_Name = null;
 	$passwordMatch = null;
 	$usernameMatch = null;
+	$isPassMatch = null;
 
 	function cryptPass($input, $rounds = 14)
 	{
@@ -58,62 +59,70 @@
 if( isset($_POST[ 'rsubmit' ]) )
 {
 	if( ( isset( $_POST[ 'ruser_Name' ] ) && !empty($_POST[ 'ruser_Name' ]) ) &&
-			( isset( $_POST[ 'r_Password' ] ) && !empty($_POST[ 'r_Password' ]) ) &&
-				( isset( $_POST[ 'remail' ] ) && !empty($_POST[ 'remail' ]) ) )
+			( isset( $_POST[ 'r_Password' ] ) && !empty($_POST[ 'r_Password' ]) )
+		)
 			{
-				$ruser_Name = $_POST[ 'ruser_Name' ];
-				$r_Password = $_POST[ 'r_Password' ];
-				$remail = $_POST[ 'remail' ];
-
-				$rsql = null;
-				$rsql =  "SELECT Users.Username AS Usernames" .
-						" FROM Users" .
-						" WHERE Users.Username = ?";
-
-				//Preparing
-				$rstmt = $mysqli->prepare( $rsql );
-
-				//binding parameter
-				$rstmt->bind_param( "s", $ruser_Name);
-
-				//execute
-				$rstmt->execute();
-
-				//bind results
-				$unresults = null;
-				$rstmt->bind_result($unresults);
-
-				//store results to get properties
-				$rstmt->store_result();
-
-				//variable for username availability
-				$isUsernameAvailable = $rstmt->num_rows === 0;
-
-				//free results
-				$rstmt->free_result();
-
-				//checks if the sql returns anything
-				if($isUsernameAvailable)
+				if(	strcmp($_POST[ 'c_Password' ], $_POST[ 'r_Password' ]) === 0)
 				{
-					$hasedPass = cryptPass($r_Password);
 
-					//write sql to create username and password
-					$isql = null;
-					$isql = "INSERT INTO users (Username, Password, Email)" .
-							" VALUES ( ? , ? , ? )";
+					$ruser_Name = $_POST[ 'ruser_Name' ];
+					$r_Password = $_POST[ 'r_Password' ];
+					//	$remail = $_POST[ 'remail' ];
 
-					//preparing
-					$istmt = $mysqli->prepare( $isql );
+					$rsql = null;
+					$rsql =  "SELECT Users.Username AS Usernames" .
+							" FROM Users" .
+							" WHERE Users.Username = ?";
+
+					//Preparing
+					$rstmt = $mysqli->prepare( $rsql );
 
 					//binding parameter
-					$istmt->bind_param( "sss", $ruser_Name, $hasedPass, $remail);
+					$rstmt->bind_param( "s", $ruser_Name);
 
 					//execute
-					$istmt->execute();
+					$rstmt->execute();
 
-					$istmt->close();
+					//bind results
+					$unresults = null;
+					$rstmt->bind_result($unresults);
 
-					$isAccountCreated = TRUE;
+					//store results to get properties
+					$rstmt->store_result();
+
+					//variable for username availability
+					$isUsernameAvailable = $rstmt->num_rows === 0;
+
+					//free results
+					$rstmt->free_result();
+
+					//checks if the sql returns anything
+					if($isUsernameAvailable)
+					{
+						$hasedPass = cryptPass($r_Password);
+
+						//write sql to create username and password
+						$isql = null;
+						$isql = "INSERT INTO users (Username, Password)" .
+								" VALUES ( ? , ? )";
+
+						//preparing
+						$istmt = $mysqli->prepare( $isql );
+
+						//binding parameter
+						$istmt->bind_param( "ss", $ruser_Name, $hasedPass);
+
+						//execute
+						$istmt->execute();
+
+						$istmt->close();
+
+						$isAccountCreated = TRUE;
+					}
+				}
+				else
+				{
+						$isPassMatch = FALSE;
 				}
 			}
 
@@ -326,8 +335,12 @@ if( isset($_POST[ 'lsubmit' ]) )
 					{
 						echo $ruser_Name . " is already taken please try again.";
 					}
+					else if($isPassMatch === FALSE)
+					{
+						echo "The passwords do not match please try again.";
+					}
 				?>
-                    <h2 class="section-heading">Register</h2>
+            <h2 class="section-heading">Register</h2>
 						<form method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
 						  <div class="form-group">
 							<label for="userName">User Name</label>
@@ -336,11 +349,16 @@ if( isset($_POST[ 'lsubmit' ]) )
 						  <div class="form-group">
 							<label for="password">Password</label>
 							<input type="password" class="form-control" id="newPassword" placeholder="Password" name= "r_Password" maxlength="100">
-						  </div>
+						</div>
+						<div class="form-group">
+						<label for="confirmPassword">Confirm Password</label>
+						<input type="password" class="form-control" id="confirmPassword" placeholder="Password" name= "c_Password" maxlength="100">
+					</div>
+						<!--
 						  <div class="form-group">
 							<label for="email"> Email </label>
 							<input type="email" class="form-control" id="newEmail" placeholder="Email" name= "remail" maxlength="254">
-						  </div>
+						</div>-->
 						  <input type="submit" name="rsubmit" class="btn btn-default" value="Register">
 						</form>
                     <hr class="light">
