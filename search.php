@@ -376,7 +376,7 @@
 		}
 
 		//Preparing
-		$newEventstmt = mysqli->prepare($newEventSQL);
+		$newEventstmt = $mysqli->prepare($newEventSQL);
 
 		//binding parameter
 		$newEventstmt->bind_param("i", $laneToAdd);
@@ -400,7 +400,7 @@
 											" Values ( ? , ? )";
 
 			$eventMeetSQL = "INSERT INTO 50FreeMeets (50FreeEID, 50FreeMID)" .
-											" Values ( ? , ? )"
+											" Values ( ? , ? )";
 		}
 		else if($meetToCreate === "100Free")
 		{
@@ -1002,6 +1002,10 @@
 						if(($_SESSION[ 'meetID' ] !== null) && ($_SESSION[ 'swimmerID' ] === null))
 						{
 							//sql to find all events in the meet
+
+				?>
+							<p>This is all the events in the meet</p>
+				<?php
 						}
 						else if(($_SESSION[ 'meetID' ] !== null)  && ($_SESSION[ 'swimmerID' ] !== null))
 						{
