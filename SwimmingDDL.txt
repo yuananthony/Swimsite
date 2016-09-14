@@ -1,4 +1,4 @@
-###ADDED EMAIL ATTRIBUTE TO THE USERS TABLE AND SPLIT TIMES FOR THE EVENTS 
+###ADDED EMAIL ATTRIBUTE TO THE USERS TABLE AND SPLIT TIMES FOR THE EVENTS
 ###ALSO ADDED ORDER OF SWIM IN THE SWIMMEREVENTS TABLES TO KEEP TRACK OF THE SWIMERS IN RELAYS
 ###NEED TO ADD AUTO INCREMENTS AND CHANGE NAMES OF VARIABLES SO THEY ARE UNIQUE
 ###SEARCH FOR "##FIX BELOW" TO GO BACK TO WHERE STOPPED
@@ -73,6 +73,7 @@ CREATE TABLE 50Free
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (50FreeEventID)
 );
 
@@ -86,6 +87,7 @@ CREATE TABLE 100Free
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (100FreeEventID)
 );
 
@@ -101,6 +103,7 @@ CREATE TABLE 200Free
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	Primary Key (200FreeEventID)
 );
 
@@ -122,6 +125,7 @@ CREATE TABLE 500Free
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (500FreeEventID)
 );
 
@@ -135,6 +139,7 @@ CREATE TABLE 100Fly
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (100FlyEventID)
 );
 
@@ -148,6 +153,7 @@ CREATE TABLE 100Breast
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (100BreastEventID)
 );
 
@@ -161,6 +167,7 @@ CREATE TABLE 100Back
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (100BackEventID)
 );
 
@@ -176,6 +183,7 @@ CREATE TABLE 200FreeRelay
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (200FreeRelayEventID)
 );
 
@@ -195,6 +203,7 @@ CREATE TABLE 400FreeRelay
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (400FreeRelayEventID)
 );
 
@@ -210,6 +219,7 @@ CREATE TABLE 200IM
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (200IMEventID)
 );
 
@@ -225,6 +235,7 @@ CREATE TABLE 200IMRelay
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (200IMRelayEventID)
 );
 
@@ -238,6 +249,7 @@ CREATE TABLE 25Free
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (25FreeEventID)
 );
 
@@ -249,6 +261,7 @@ CREATE TABLE 25Fly
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (25FlyEventID)
 );
 
@@ -260,6 +273,7 @@ CREATE TABLE 25Back
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (25BackEventID)
 );
 
@@ -271,6 +285,7 @@ CREATE TABLE 25Breast
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (25BreastEventID)
 );
 
@@ -286,8 +301,9 @@ CREATE TABLE 100FreeRelay
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (100FreeRelayEventID)
-	
+
 );
 
 CREATE TABLE 100IM
@@ -302,6 +318,7 @@ CREATE TABLE 100IM
 	Reason varchar (100),
 	Lane int,
 	Comment varchar (100),
+	Name varchar (20),
 	PRIMARY KEY (100IMEventID)
 );
 
@@ -472,6 +489,7 @@ CREATE TABLE 50FreeMeets
 (
 	50FreeEID int,
 	50FreeMID int,
+	Order int,
 	Primary Key (50FreeEID, 50FreeMID),
 	CONSTRAINT 50FreeEID_fk FOREIGN KEY (50FreeEID) REFERENCES 50Free (50FreeEventID),
 	CONSTRAINT 50FreeMID_fk FOREIGN KEY (50FreeMID) REFERENCES Meets (MeetID)
@@ -482,6 +500,7 @@ CREATE TABLE 100FreeMeets
 (
 	100FreeEID int,
 	100FreeMID int,
+	Order int,
 	Primary Key (100FreeEID, 100FreeMID),
 	CONSTRAINT 100FreeEID_fk FOREIGN KEY (100FreeEID) REFERENCES 100Free (100FreeEventID),
 	CONSTRAINT 100FreeMID_fk FOREIGN KEY (100FreeMID) REFERENCES Meets (MeetID)
@@ -491,6 +510,7 @@ CREATE TABLE 200FreeMeets
 (
 	200FreeEID int,
 	200FreeMID int,
+	Order int,
 	Primary Key (200FreeEID, 200FreeMID),
 	CONSTRAINT 200FreeEID_fk FOREIGN KEY (200FreeEID) REFERENCES 200Free (200FreeEventID),
 	CONSTRAINT 200FreeMID_fk FOREIGN KEY (200FreeMID) REFERENCES Meets (MeetID)
@@ -500,6 +520,7 @@ CREATE TABLE 500FreeMeets
 (
 	500FreeEID int,
 	500FreeMID int,
+	Order int,
 	Primary Key (500FreeEID, 500FreeMID),
 	CONSTRAINT 500FreeEID_fk FOREIGN KEY (500FreeEID) REFERENCES 500Free (500FreeEventID),
 	CONSTRAINT 500FreeMID_fk FOREIGN KEY (500FreeMID) REFERENCES Meets (MeetID)
@@ -509,6 +530,7 @@ CREATE TABLE 100FlyMeets
 (
 	100FlyEID int,
 	100FlyMID int,
+	Order int,
 	Primary Key (100FlyEID, 100FlyMID),
 	CONSTRAINT 100FlyEID_fk FOREIGN KEY (100FlyEID) REFERENCES 100Fly (100FlyEventID),
 	CONSTRAINT 100FlyMID_fk FOREIGN KEY (100FlyMID) REFERENCES Meets (MeetID)
@@ -518,6 +540,7 @@ CREATE TABLE 100BackMeets
 (
 	100BackEID int,
 	100BackMID int,
+	Order int,
 	Primary Key (100BackEID, 100BackMID),
 	CONSTRAINT 100BackEID_fk FOREIGN KEY (100BackEID) REFERENCES 100Back (100BackEventID),
 	CONSTRAINT 100BackMID_fk FOREIGN KEY (100BackMID) REFERENCES Meets (MeetID)
@@ -527,6 +550,7 @@ CREATE TABLE 100BreastMeets
 (
 	100BreastEID int,
 	100BreastMID int,
+	Order int,
 	Primary Key (100BreastEID, 100BreastMID),
 	CONSTRAINT 100BreastEID_fk FOREIGN KEY (100BreastEID) REFERENCES 100Breast (100BreastEventID),
 	CONSTRAINT 100BreastMID_fk FOREIGN KEY (100BreastMID) REFERENCES Meets (MeetID)
@@ -536,6 +560,7 @@ CREATE TABLE 200FreeRelayMeets
 (
 	200FreeRelayEID int,
 	200FreeRelayMID int,
+	Order int,
 	Primary Key (200FreeRelayEID, 200FreeRelayMID),
 	CONSTRAINT 200FreeRelayEID_fk FOREIGN KEY (200FreeRelayEID) REFERENCES 200FreeRelay (200FreeRelayEventID),
 	CONSTRAINT 200FreeRelayMID_fk FOREIGN KEY (200FreeRelayMID) REFERENCES Meets (MeetID)
@@ -545,6 +570,7 @@ CREATE TABLE 400FreeRelayMeets
 (
 	400FreeRelayEID int,
 	400FreeRelayMID int,
+	Order int,
 	Primary Key (400FreeRelayEID, 400FreeRelayMID),
 	CONSTRAINT 400FreeRelayEID_fk FOREIGN KEY (400FreeRelayEID) REFERENCES 400FreeRelay (400FreeRelayEventID),
 	CONSTRAINT 400FreeRelayMID_fk FOREIGN KEY (400FreeRelayMID) REFERENCES Meets (MeetID)
@@ -554,6 +580,7 @@ CREATE TABLE 200IMMeets
 (
 	200IMEID int,
 	200IMMID int,
+	Order int,
 	Primary Key (200IMEID, 200IMMID),
 	CONSTRAINT 200IMEID_fk FOREIGN KEY (200IMEID) REFERENCES 200IM (200IMEventID),
 	CONSTRAINT 200IMMID_fk FOREIGN KEY (200IMMID) REFERENCES Meets (MeetID)
@@ -563,6 +590,7 @@ CREATE TABLE 200IMRelayMeets
 (
 	200IMRelayEID int,
 	200IMRelayMID int,
+	Order int,
 	Primary Key (200IMRelayEID, 200IMRelayMID),
 	CONSTRAINT 200IMRelayEID_fk FOREIGN KEY (200IMRelayEID) REFERENCES 200IMRelay (200IMRelayEventID),
 	CONSTRAINT 200IMRelayMID_fk FOREIGN KEY (200IMRelayMID) REFERENCES Meets (MeetID)
@@ -572,6 +600,7 @@ CREATE TABLE 25FreeMeets
 (
 	25FreeEID int,
 	25FreeMID int,
+	Order int,
 	Primary Key (25FreeEID, 25FreeMID),
 	CONSTRAINT 25FreeEID_fk FOREIGN KEY (25FreeEID) REFERENCES 25Free (25FreeEventID),
 	CONSTRAINT 25FreeMID_fk FOREIGN KEY (25FreeMID) REFERENCES Meets (MeetID)
@@ -581,6 +610,7 @@ CREATE TABLE 25BackMeets
 (
 	25BackEID int,
 	25BackMID int,
+	Order int,
 	Primary Key (25BackEID, 25BackMID),
 	CONSTRAINT 25BackEID_fk FOREIGN KEY (25BackEID) REFERENCES 25Back (25BackEventID),
 	CONSTRAINT 25BackMID_fk FOREIGN KEY (25BackMID) REFERENCES Meets (MeetID)
@@ -590,6 +620,7 @@ CREATE TABLE 25BreastMeets
 (
 	25BreastEID int,
 	25BreastMID int,
+	Order int,
 	Primary Key (25BreastEID, 25BreastMID),
 	CONSTRAINT 25BreastEID_fk FOREIGN KEY (25BreastEID) REFERENCES 25Breast (25BreastEventID),
 	CONSTRAINT 25BreastMID_fk FOREIGN KEY (25BreastMID) REFERENCES Meets (MeetID)
@@ -599,6 +630,7 @@ CREATE TABLE 25FlyMeets
 (
 	25FlyEID int,
 	25FlyMID int,
+	Order int,
 	Primary Key (25FlyEID, 25FlyMID),
 	CONSTRAINT 25FlyEID_fk FOREIGN KEY (25FlyEID) REFERENCES 25Fly (25FlyEventID),
 	CONSTRAINT 25FlyMID_fk FOREIGN KEY (25FlyMID) REFERENCES Meets (MeetID)
@@ -608,6 +640,7 @@ CREATE TABLE 100FreeRelayMeets
 (
 	100FreeRelayEID int,
 	100FreeRelayMID int,
+	Order int,
 	Primary Key (100FreeRelayEID, 100FreeRelayMID),
 	CONSTRAINT 100FreeRelayEID_fk FOREIGN KEY (100FreeRelayEID) REFERENCES 100FreeRelay (100FreeRelayEventID),
 	CONSTRAINT 100FreeRelayMID_fk FOREIGN KEY (100FreeRelayMID) REFERENCES Meets (MeetID)
@@ -617,6 +650,7 @@ CREATE TABLE 100IMMeets
 (
 	100IMEID int,
 	100IMMID int,
+	Order int,
 	Primary Key (100IMEID, 100IMMID),
 	CONSTRAINT 100IMEID_fk FOREIGN KEY (100IMEID) REFERENCES 100IM (100IMEventID),
 	CONSTRAINT 100IMMID_fk FOREIGN KEY (100IMMID) REFERENCES Meets (MeetID)
