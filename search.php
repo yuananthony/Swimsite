@@ -302,8 +302,10 @@
 	if(isset($_POST[ 'AddEvent' ]) )
 	{
 		$meetToCreate = $_POST[ 'selectEvent' ];
+		$orderInMeet = $_POST[ 'newEventOrder'];
 		$laneToAdd = $_POST[ 'newEventLane' ];
 		$swimmerIDToSwim = $_POST[ 'selectSwimmerForEvent' ];
+		$eventName = null;
 
 		//NEED TO WRITE SQL TO ADD EVENT THEN GET ID THEN ADD SWIMMERMEET AND EVENTMEET
 		//SQL to Prepare
@@ -311,75 +313,101 @@
 
 		if($meetToCreate === "50Free")
 		{
-			$newEventSQL = "INSERT INTO 50Free (Lane)" .
-											" Values ( ? )";
+			$newEventSQL = "INSERT INTO 50Free (Lane, Name)" .
+											" Values ( ? , ? )";
+
+			$eventName = "50Free";
 		}
 		else if($meetToCreate === "100Free")
 		{
-			$newEventSQL = "INSERT INTO 100Free (Lane)" .
-											" Values ( ? )";
+			$newEventSQL = "INSERT INTO 100Free (Lane, Name)" .
+											" Values ( ? , ? )";
+
+			$eventName = "100Free";
 		}
 		else if($meetToCreate === "200Free")
 		{
-			$newEventSQL = "INSERT INTO 200Free (Lane)" .
-											" Values ( ? )";
+			$newEventSQL = "INSERT INTO 200Free (Lane, Name)" .
+											" Values ( ? , ? )";
+
+			$eventName = "200Free";
 		}
 		else if($meetToCreate === "500Free")
 		{
-			$newEventSQL = "INSERT INTO 500Free (Lane)" .
-											" Values ( ? )";
+			$newEventSQL = "INSERT INTO 500Free (Lane, Name)" .
+											" Values ( ? , ? )";
+
+			$eventName = "500Free";
 		}
 		else if($meetToCreate === "100Fly")
 		{
-			$newEventSQL = "INSERT INTO 100Fly (Lane)" .
-											" Values ( ? )";
+			$newEventSQL = "INSERT INTO 100Fly (Lane, Name)" .
+											" Values ( ? , ? )";
+
+			$eventName = "100Fly";
 		}
 		else if($meetToCreate === "100Breast")
 		{
-			$newEventSQL = "INSERT INTO 100Breast (Lane)" .
-											" Values ( ? )";
+			$newEventSQL = "INSERT INTO 100Breast (Lane, Name)" .
+											" Values ( ? , ? )";
+
+			$eventName = "100Breast";
 		}
 		else if($meetToCreate === "100Back")
 		{
-			$newEventSQL = "INSERT INTO 100Back (Lane)" .
-											" Values ( ? )";
+			$newEventSQL = "INSERT INTO 100Back (Lane, Name)" .
+											" Values ( ? , ? )";
+
+			$eventName = "100Back";
 		}
 		else if($meetToCreate === "200IM")
 		{
-			$newEventSQL = "INSERT INTO 200IM (Lane)" .
-											" Values ( ? )";
+			$newEventSQL = "INSERT INTO 200IM (Lane, Name)" .
+											" Values ( ? , ? )";
+
+			$eventName = "200IM";
 		}
 		else if($meetToCreate === "25Free")
 		{
-			$newEventSQL = "INSERT INTO 25Free (Lane)" .
-											" Values ( ? )";
+			$newEventSQL = "INSERT INTO 25Free (Lane, Name)" .
+											" Values ( ? , ? )";
+
+			$eventName = "25Free";
 		}
 		else if($meetToCreate === "25Fly")
 		{
-			$newEventSQL = "INSERT INTO 25Fly (Lane)" .
-											" Values ( ? )";
+			$newEventSQL = "INSERT INTO 25Fly (Lane, Name)" .
+											" Values ( ? , ? )";
+
+			$eventName = "25Fly";
 		}
 		else if($meetToCreate === "25Back")
 		{
-			$newEventSQL = "INSERT INTO 25Back (Lane)" .
-											" Values ( ? )";
+			$newEventSQL = "INSERT INTO 25Back (Lane, Name)" .
+											" Values ( ? , ? )";
+
+			$eventName = "25Back";
 		}
 		else if($meetToCreate === "25Breast")
 		{
-			$newEventSQL = "INSERT INTO 25Breast (Lane)" .
-											" Values ( ? )";
+			$newEventSQL = "INSERT INTO 25Breast (Lane, Name)" .
+											" Values ( ? , ? )";
+
+			$eventName = "25Breast";
 		}
 		else if($meetToCreate === "100IM")
 		{
-			$newEventSQL = "INSERT INTO 100IM (Lane)" .
-											" Values ( ? )";
+			$newEventSQL = "INSERT INTO 100IM (Lane, Name)" .
+											" Values ( ? , ? )";
+
+			$eventName = "100IM";
 		}
 
 		//Preparing
 		$newEventstmt = $mysqli->prepare($newEventSQL);
 
 		//binding parameter
-		$newEventstmt->bind_param("i", $laneToAdd);
+		$newEventstmt->bind_param("is", $laneToAdd, $eventName);
 
 		//execute
 		$newEventstmt->execute();
@@ -393,110 +421,110 @@
 
 		$swimmerEventSQL = null;
 		$eventMeetSQL = null;
-
+/*
 		if($meetToCreate === "50Free")
 		{
 			$swimmerEventSQL = "INSERT INTO 50FreeSwimmers (50FreeSID, 50FreeSwims)" .
 											" Values ( ? , ? )";
 
-			$eventMeetSQL = "INSERT INTO 50FreeMeets (50FreeEID, 50FreeMID)" .
-											" Values ( ? , ? )";
+			$eventMeetSQL = "INSERT INTO 50FreeMeets (50FreeEID, 50FreeMID, Order)" .
+											" Values ( ? , ? , ? )";
 		}
 		else if($meetToCreate === "100Free")
 		{
 			$swimmerEventSQL = "INSERT INTO 100FreeSwimmers (100FreeSID, 100FreeSwims)" .
 											" Values ( ? , ? )";
 
-			$eventMeetSQL = "INSERT INTO 100FreeMeets (100FreeEID, 100FreeMID)" .
-											" Values ( ? , ? )";
+			$eventMeetSQL = "INSERT INTO 100FreeMeets (100FreeEID, 100FreeMID, Order)" .
+											" Values ( ? , ? , ? )";
 		}
 		else if($meetToCreate === "200Free")
 		{
 			$swimmerEventSQL = "INSERT INTO 200FreeSwimmers (200FreeSID, 200FreeSwims)" .
 											" Values ( ? , ? )";
 
-			$eventMeetSQL = "INSERT INTO 200FreeMeets (200FreeEID, 200FreeMID)" .
-											" Values ( ? , ? )";
+			$eventMeetSQL = "INSERT INTO 200FreeMeets (200FreeEID, 200FreeMID, Order)" .
+											" Values ( ? , ? , ? )";
 		}
 		else if($meetToCreate === "500Free")
 		{
 			$swimmerEventSQL = "INSERT INTO 500FreeSwimmers (500FreeSID, 500FreeSwims)" .
 											" Values ( ? , ? )";
 
-			$eventMeetSQL = "INSERT INTO 500FreeMeets (500FreeEID, 500FreeMID)" .
-											" Values ( ? , ? )";
+			$eventMeetSQL = "INSERT INTO 500FreeMeets (500FreeEID, 500FreeMID, Order)" .
+											" Values ( ? , ? , ? )";
 		}
 		else if($meetToCreate === "100Fly")
 		{
 			$swimmerEventSQL = "INSERT INTO 100FlySwimmers (100FlySID, 100FlySwims)" .
 											" Values ( ? , ? )";
 
-			$eventMeetSQL = "INSERT INTO 100FlyMeets (100FlyEID, 100FlyMID)" .
-											" Values ( ? , ? )";
+			$eventMeetSQL = "INSERT INTO 100FlyMeets (100FlyEID, 100FlyMID, Order)" .
+											" Values ( ? , ? , ? )";
 		}
 		else if($meetToCreate === "100Breast")
 		{
 			$swimmerEventSQL = "INSERT INTO 100BreastSwimmers (100BreastSID, 100BreastSwims)" .
 											" Values ( ? , ? )";
 
-			$eventMeetSQL = "INSERT INTO 100BreastMeets (100BreastEID, 100BreastMID)" .
-											" Values ( ? , ? )";
+			$eventMeetSQL = "INSERT INTO 100BreastMeets (100BreastEID, 100BreastMID, Order)" .
+											" Values ( ? , ? , ? )";
 		}
 		else if($meetToCreate === "100Back")
 		{
 			$swimmerEventSQL = "INSERT INTO 100BackSwimmers (100BackSID, 100BackSwims)" .
 											" Values ( ? , ? )";
 
-			$eventMeetSQL = "INSERT INTO 100BackMeets (100BackEID, 100BackMID)" .
-											" Values ( ? , ? )";
+			$eventMeetSQL = "INSERT INTO 100BackMeets (100BackEID, 100BackMID, Order)" .
+											" Values ( ? , ? , ? )";
 		}
 		else if($meetToCreate === "200IM")
 		{
 			$swimmerEventSQL = "INSERT INTO 200IMSwimmers (200IMSID, 200IMSwims)" .
 											" Values ( ? , ? )";
 
-			$eventMeetSQL = "INSERT INTO 200IMMeets (200IMEID, 200IMMID)" .
-											" Values ( ? , ? )";
+			$eventMeetSQL = "INSERT INTO 200IMMeets (200IMEID, 200IMMID, Order)" .
+											" Values ( ? , ? , ? )";
 		}
 		else if($meetToCreate === "25Free")
 		{
 			$swimmerEventSQL = "INSERT INTO 25FreeSwimmers (25FreeSID, 25FreeSwims)" .
 											" Values ( ? , ? )";
 
-			$eventMeetSQL = "INSERT INTO 25FreeMeets (25FreeEID, 25FreeMID)" .
-											" Values ( ? , ? )";
+			$eventMeetSQL = "INSERT INTO 25FreeMeets (25FreeEID, 25FreeMID, Order)" .
+											" Values ( ? , ? , ? )";
 		}
 		else if($meetToCreate === "25Fly")
 		{
 			$swimmerEventSQL = "INSERT INTO 25FlySwimmers (25FlySID, 25FlySwims)" .
 											" Values ( ? , ? )";
 
-			$eventMeetSQL = "INSERT INTO 25FlyMeets (25FlyEID, 25FlyMID)" .
-											" Values ( ? , ? )";
+			$eventMeetSQL = "INSERT INTO 25FlyMeets (25FlyEID, 25FlyMID, Order)" .
+											" Values ( ? , ? , ? )";
 		}
 		else if($meetToCreate === "25Back")
 		{
 			$swimmerEventSQL = "INSERT INTO 25BackSwimmers (25BackSID, 25BackSwims)" .
 											" Values ( ? , ? )";
 
-			$eventMeetSQL = "INSERT INTO 25BackMeets (25BackEID, 25BackMID)" .
-											" Values ( ? , ? )";
+			$eventMeetSQL = "INSERT INTO 25BackMeets (25BackEID, 25BackMID, Order)" .
+											" Values ( ? , ? , ? )";
 		}
 		else if($meetToCreate === "25Breast")
 		{
 			$swimmerEventSQL = "INSERT INTO 25BreastSwimmers (25BreastSID, 25BreastSwims)" .
 											" Values ( ? , ? )";
 
-			$eventMeetSQL = "INSERT INTO 25BreastMeets (25BreastEID, 25BreastMID)" .
-											" Values ( ? , ? )";
+			$eventMeetSQL = "INSERT INTO 25BreastMeets (25BreastEID, 25BreastMID, Order)" .
+											" Values ( ? , ? , ? )";
 		}
 		else if($meetToCreate === "100IM")
 		{
 			$swimmerEventSQL = "INSERT INTO 100IMSwimmers (100IMSID, 100IMSwims)" .
 											" Values ( ? , ? )";
 
-			$eventMeetSQL = "INSERT INTO 100IMMeets (100IMEID, 100IMMID)" .
-											" Values ( ? , ? )";
+			$eventMeetSQL = "INSERT INTO 100IMMeets (100IMEID, 100IMMID, Order)" .
+											" Values ( ? , ? , ? )";
 		}
 
 		//Preparing SwimmerEvent
@@ -515,13 +543,13 @@
 		$eventMeetstmt = $mysqli->prepare($eventMeetSQL);
 
 		//Binding Parameter
-		$eventMeetstmt->bind_param("ii", $newEventID, $_SESSION[ 'meetID' ]);
+		$eventMeetstmt->bind_param("iii", $newEventID, $_SESSION[ 'meetID' ], $orderInMeet);
 
 		//execute
 		$eventMeetstmt->execute();
 
 		//close
-		$eventMeetstmt->close();
+		$eventMeetstmt->close();*/
 	}
 
 	if( isset($_POST[ 'Results' ]) )
@@ -796,6 +824,10 @@
 											<option value = "25Breast"> 25 Breast </option>
 											<option value = "100IM"> 100 IM </option>
 										</select>
+									</div>
+									<div class = "form-group">
+										<label for"selOrder">Order In Meet</label>
+										<input type = "number" class = "form-control" id = "selOrder" name = "newEventOrder">
 									</div>
 									<div class = "form-group">
 										<label for="selLane">Select lane:</label>
