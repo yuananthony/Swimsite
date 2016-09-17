@@ -550,6 +550,23 @@
 
 		//close
 		$eventMeetstmt->close();
+
+		//SQL TO Prepare
+		$meetEventSQL = null;
+		$meetEventSQL = "INSERT IGNORE INTO MeetEvents" .
+										" Values ( ? , ? )";
+
+		//Preapring MeetEvent
+		$meetEventstmt = $mysqli->prepare($meetEventSQL);
+
+		//Binding Parameter
+		$meetEventstmt->bind_param("is", $_SESSION[ 'meetID' ], $meetToCreate);
+
+		//execute
+		$meetEventstmt->execute();
+
+		//close
+		$meetEventstmt->close();
 	}
 
 	if( isset($_POST[ 'Results' ]) )
@@ -1033,9 +1050,33 @@
 					{
 						if(($_SESSION[ 'meetID' ] !== null) && ($_SESSION[ 'swimmerID' ] === null))
 						{
-							//sql to find all events in the meet
 
-				?>
+							//table
+					?>
+							<table class="table table-responsive">
+								<thead>
+									<tr>
+										<th>Order</th>
+										<th>Event</th>
+										<th>FirstName</th>
+										<th>LastName</th>
+										<th>Time</th>
+										<th>DQ</th>
+										<th>Lane</th>
+									</tr>
+								</thead>
+								<tbody>
+								<form>
+								<?php
+									//find all events in a meet
+
+									$allEventsSQL = null;
+									$allEventsSQL = "SELECT";
+								 ?>
+								</form>
+								<tbody>
+							</table>
+
 							<p>This is all the events in the meet</p>
 				<?php
 						}
