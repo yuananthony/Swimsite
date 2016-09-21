@@ -238,7 +238,7 @@
 		//iterating over results of find all swimmers on a team
 		$findSwimmersstmt->bind_result($copySwimmerID);
 
-		$swimmerIDArray = array();
+		$swimmerIDArray = [];
 
 		while($findSwimmersstmt->fetch())
 		{
@@ -268,7 +268,7 @@
 
 		}
 
-		unset($copiedSwimmerID);
+		unset($swimmerIDArray);
 
 		//closing
 		$insertSwimmersFromOldToNewstmt->close();
@@ -1071,6 +1071,7 @@
 					<?php
 						if(($_SESSION[ 'meetID' ] !== null) && ($_SESSION[ 'swimmerID' ] === null))
 						{
+
 									//meet events
 									$findMeetEventsSQL = null;
 									$findMeetEventsSQL = "SELECT MeetEvents.MEEventName AS EventName" .
@@ -1078,7 +1079,7 @@
 																				" WHERE MeetEvents.MEMeetID = ?";
 
 									//Preparing Meet events
-									$findMeetEventsstmt = $mysqli->prepare($findmeetEventsSQL);
+									$findMeetEventsstmt = $mysqli->prepare($findMeetEventsSQL);
 
 									//Binding
 									$findMeetEventsstmt->bind_param("i", $_SESSION[ 'meetID' ]);
@@ -1088,6 +1089,8 @@
 
 									//bind results
 									$findMeetEventsstmt->bind_result($MeetName);
+
+									$findEventArray = [];
 
 									while($findMeetEventsstmt->fetch())
 									{
@@ -1213,42 +1216,51 @@
 																				" WHERE 100IMMeets.100IMMID = ? ";
 										}
 
-										//Prepare findEventSQL
-										$findEventstmt = $mysqli->prepare($findEventSQL);
+										$findEventArray[] = $findEventSQL;
 
-										//bind
-										$findEventstmt->bind_param("i", $_SESSION[ 'meetID' ]);
-
-										//execute
-										$findEventstmt->execute();
-
-										$findEventstmt->bind_result($eventOrder, $nameOfEvent, $firstNameOfSwimmer, $lastNameOfSwimmer, $timeOfSwimmer, $isDQ, $laneNumber, $selectedEventID);
-
-										while($findEventstmt->fetch())
-										{
-									?>
-												<tr>
-													<td><?php $eventOrder ?></td>
-													<td><?php $nameOfEvent ?></td>
-													<td><?php $firstNameOfSwimmer ?></td>
-													<td><?php $lastNameOfSwimmer ?></td>
-													<td><?php $timeOfSwimmer ?></td>
-													<td><?php $isDQ ?></td>
-													<td><?php $laneNumber ?></td>
-													<td>
-														<div class = "radio">
-															<input type="radio" name="selectSwimmerEvent" value= <?php $selectedEventID ?>>
-														</div>
-													</td>
-												</tr>
-
-									<?php
-										}
 									}
 
+									$findMeetEventsstmt->close();
+
+										foreach($findEventArray as $eventsToSearch)
+										{
+
+											//Prepare findEventSQL
+											$findEventstmt = $mysqli->prepare($eventsToSearch);
+
+											//bind
+											$findEventstmt->bind_param("i", $_SESSION[ 'meetID' ]);
+
+											//execute
+											$findEventstmt->execute();
+
+											$findEventstmt->bind_result($eventOrder, $nameOfEvent, $firstNameOfSwimmer, $lastNameOfSwimmer, $timeOfSwimmer, $isDQ, $laneNumber, $selectedEventID);
+
+											while($findEventstmt->fetch())
+											{
+										?>
+													<tr>
+														<td><?php echo $eventOrder ?></td>
+														<td><?php echo $nameOfEvent ?></td>
+														<td><?php echo $firstNameOfSwimmer ?></td>
+														<td><?php echo $lastNameOfSwimmer ?></td>
+														<td><?php echo $timeOfSwimmer ?></td>
+														<td><?php echo $isDQ ?></td>
+														<td><?php echo $laneNumber ?></td>
+														<td>
+															<div class = "radio" align="center">
+																<input type="radio" name="selectSwimmerEvent" value= <?php echo $selectedEventID ?>>
+															</div>
+														</td>
+													</tr>
+									<?php
+											}
+										}
+
+										unset($findEventArray);
 								 ?>
 								</form>
-								<tbody>
+							</tbody>
 							</table>
 
 				<?php
