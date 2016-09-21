@@ -1051,26 +1051,26 @@
 					}
 					else if($_SESSION[ 'currentSelection' ] === 'Events')
 					{
+						?>
+						<table class="table table-responsive">
+							<thead>
+								<tr>
+									<th>Order</th>
+									<th>Event</th>
+									<th>FirstName</th>
+									<th>LastName</th>
+									<th>Time</th>
+									<th>DQ</th>
+									<th>Lane</th>
+									<th>Select</th>
+								</tr>
+							</thead>
+							<tbody>
+							<form>
+
+					<?php
 						if(($_SESSION[ 'meetID' ] !== null) && ($_SESSION[ 'swimmerID' ] === null))
 						{
-
-							//table
-					?>
-							<table class="table table-responsive">
-								<thead>
-									<tr>
-										<th>Order</th>
-										<th>Event</th>
-										<th>FirstName</th>
-										<th>LastName</th>
-										<th>Time</th>
-										<th>DQ</th>
-										<th>Lane</th>
-									</tr>
-								</thead>
-								<tbody>
-								<form>
-								<?php
 									//meet events
 									$findMeetEventsSQL = null;
 									$findMeetEventsSQL = "SELECT MeetEvents.MEEventName AS EventName" .
@@ -1087,7 +1087,7 @@
 									$findMeetEventsstmt->execute();
 
 									//bind results
-									$findMeetEventsstmt->bind_result($meetName);
+									$findMeetEventsstmt->bind_result($MeetName);
 
 									while($findMeetEventsstmt->fetch())
 									{
@@ -1095,8 +1095,8 @@
 										//write sql for EACH event and if statement to swtch between them
 										if($MeetName === "50Free")
 										{
-											$event50FreeSQL = null;
-											$event50FreeSQL = "SELECT 50FreeMeets.OrderInMeet AS EOrder, 50Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 50Free.Time AS ETime, 50Free.DQ AS DQ, 50Free.Lane AS Lane" .
+											$findEventSQL = null;
+											$findEventSQL = "SELECT 50FreeMeets.OrderInMeet AS EOrder, 50Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 50Free.Time AS ETime, 50Free.DQ AS DQ, 50Free.Lane AS Lane, 50Free.50FreeEventID AS EventID" .
 																				" FROM 50FreeMeets INNER JOIN 50Free ON 50Free.50FreeEventID = 50FreeMeets.50FreeEID" .
 																				" INNER JOIN 50FreeSwimmers ON 50FreeSwimmers.50FreeSwims = 50Free.50FreeEventID" .
 																				" INNER JOIN Swimmers ON Swimmers.SNID = 50FreeSwimmers.50FreeSID" .
@@ -1106,8 +1106,8 @@
 										}
 										else if($MeetName === "100Free")
 										{
-											$event100FreeSQL = null;
-											$event100FreeSQL = "SELECT 100FreeMeets.OrderInMeet AS EOrder, 100Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 100Free.Time AS ETime, 100Free.DQ AS DQ, 100Free.Lane AS Lane" .
+											$findEventSQL = null;
+											$findEventSQL = "SELECT 100FreeMeets.OrderInMeet AS EOrder, 100Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 100Free.Time AS ETime, 100Free.DQ AS DQ, 100Free.Lane AS Lane, 100Free.100FreeEventID AS EventID" .
 																				" FROM 100FreeMeets INNER JOIN 100Free ON 100Free.100FreeEventID = 100FreeMeets.100FreeEID" .
 																				" INNER JOIN 100FreeSwimmers ON 100FreeSwimmers.100FreeSwims = 100Free.100FreeEventID" .
 																				" INNER JOIN Swimmers ON Swimmers.SNID = 100FreeSwimmers.100FreeSID" .
@@ -1115,8 +1115,8 @@
 										}
 										else if($MeetName === "200Free")
 										{
-											$event200FreeSQL = null;
-											$event200FreeSQL = "SELECT 200FreeMeets.OrderInMeet AS EOrder, 200Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 200Free.Time AS ETime, 200Free.DQ AS DQ, 200Free.Lane AS Lane" .
+											$findEventSQL = null;
+											$findEventSQL = "SELECT 200FreeMeets.OrderInMeet AS EOrder, 200Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 200Free.Time AS ETime, 200Free.DQ AS DQ, 200Free.Lane AS Lane, 200Free.200FreeEventID AS EventID" .
 																				" FROM 200FreeMeets INNER JOIN 200Free ON 200Free.200FreeEventID = 200FreeMeets.200FreeEID" .
 																				" INNER JOIN 200FreeSwimmers ON 200FreeSwimmers.200FreeSwims = 200Free.200FreeEventID" .
 																				" INNER JOIN Swimmers ON Swimmers.SNID = 200FreeSwimmers.200FreeSID" .
@@ -1124,8 +1124,8 @@
 										}
 										else if($MeetName === "500Free")
 										{
-											$event500FreeSQL = null;
-											$event500FreeSQL = "SELECT 500FreeMeets.OrderInMeet AS EOrder, 500Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 500Free.Time AS ETime, 500Free.DQ AS DQ, 500Free.Lane AS Lane" .
+											$findEventSQL = null;
+											$findEventSQL = "SELECT 500FreeMeets.OrderInMeet AS EOrder, 500Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 500Free.Time AS ETime, 500Free.DQ AS DQ, 500Free.Lane AS Lane, 500Free.500FreeEventID AS EventID" .
 																				" FROM 500FreeMeets INNER JOIN 500Free ON 500Free.500FreeEventID = 500FreeMeets.500FreeEID" .
 																				" INNER JOIN 500FreeSwimmers ON 500FreeSwimmers.500FreeSwims = 500Free.500FreeEventID" .
 																				" INNER JOIN Swimmers ON Swimmers.SNID = 500FreeSwimmers.500FreeSID" .
@@ -1133,8 +1133,8 @@
 										}
 										else if($MeetName === "100Fly")
 										{
-											$event100FlySQL = null;
-											$event100FlySQL = "SELECT 100FlyMeets.OrderInMeet AS EOrder, 100Fly.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 100Fly.Time AS ETime, 100Fly.DQ AS DQ, 100Fly.Lane AS Lane" .
+											$findEventSQL = null;
+											$findEventSQL = "SELECT 100FlyMeets.OrderInMeet AS EOrder, 100Fly.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 100Fly.Time AS ETime, 100Fly.DQ AS DQ, 100Fly.Lane AS Lane, 100Fly.100FlyEventID AS EventID" .
 																				" FROM 100FlyMeets INNER JOIN 100Fly ON 100Fly.100FlyEventID = 100FlyMeets.100FlyEID" .
 																				" INNER JOIN 100FlySwimmers ON 100FlySwimmers.100FlySwims = 100Fly.100FlyEventID" .
 																				" INNER JOIN Swimmers ON Swimmers.SNID = 100FlySwimmers.100FlySID" .
@@ -1142,8 +1142,8 @@
 										}
 										else if($MeetName === "100Breast")
 										{
-											$event100BreastSQL = null;
-											$event100BreastSQL = "SELECT 100BreastMeets.OrderInMeet AS EOrder, 100Breast.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 100Breast.Time AS ETime, 100Breast.DQ AS DQ, 100Breast.Lane AS Lane" .
+											$findEventSQL = null;
+											$findEventSQL = "SELECT 100BreastMeets.OrderInMeet AS EOrder, 100Breast.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 100Breast.Time AS ETime, 100Breast.DQ AS DQ, 100Breast.Lane AS Lane, 100Breast.100BreastEventID AS EventID" .
 																				" FROM 100BreastMeets INNER JOIN 100Breast ON 100Breast.100BreastEventID = 100BreastMeets.100BreastEID" .
 																				" INNER JOIN 100BreastSwimmers ON 100BreastSwimmers.100BreastSwims = 100Breast.100BreastEventID" .
 																				" INNER JOIN Swimmers ON Swimmers.SNID = 100BreastSwimmers.100BreastSID" .
@@ -1151,8 +1151,8 @@
 										}
 										else if($MeetName === "100Back")
 										{
-											$event100BackSQL = null;
-											$event100BackSQL = "SELECT 100BackMeets.OrderInMeet AS EOrder, 100Back.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 100Back.Time AS ETime, 100Back.DQ AS DQ, 100Back.Lane AS Lane" .
+											$findEventSQL = null;
+											$findEventSQL = "SELECT 100BackMeets.OrderInMeet AS EOrder, 100Back.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 100Back.Time AS ETime, 100Back.DQ AS DQ, 100Back.Lane AS Lane, 100Back.100BackEventID AS EventID" .
 																				" FROM 100BackMeets INNER JOIN 100Back ON 100Back.100BackEventID = 100BackMeets.100BackEID" .
 																				" INNER JOIN 100BackSwimmers ON 100BackSwimmers.100BackSwims = 100Back.100BackEventID" .
 																				" INNER JOIN Swimmers ON Swimmers.SNID = 100BackSwimmers.100BackSID" .
@@ -1160,8 +1160,8 @@
 										}
 										else if($MeetName === "200IM")
 										{
-											$event200IMSQL = null;
-											$event200IMSQL = "SELECT 200IMMeets.OrderInMeet AS EOrder, 200IM.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 200IM.Time AS ETime, 200IM.DQ AS DQ, 200IM.Lane AS Lane" .
+											$findEventSQL = null;
+											$findEventSQL = "SELECT 200IMMeets.OrderInMeet AS EOrder, 200IM.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 200IM.Time AS ETime, 200IM.DQ AS DQ, 200IM.Lane AS Lane, 200IM.200IMEventID AS EventID" .
 																				" FROM 200IMMeets INNER JOIN 200IM ON 200IM.200IMEventID = 200IMMeets.200IMEID" .
 																				" INNER JOIN 200IMSwimmers ON 200IMSwimmers.200IMSwims = 200IM.200IMEventID" .
 																				" INNER JOIN Swimmers ON Swimmers.SNID = 200IMSwimmers.200IMSID" .
@@ -1169,8 +1169,8 @@
 										}
 										else if($MeetName === "25Free")
 										{
-											$event25FreeSQL = null;
-											$event25FreeSQL = "SELECT 25FreeMeets.OrderInMeet AS EOrder, 25Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 25Free.Time AS ETime, 25Free.DQ AS DQ, 25Free.Lane AS Lane" .
+											$findEventSQL = null;
+											$findEventSQL = "SELECT 25FreeMeets.OrderInMeet AS EOrder, 25Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 25Free.Time AS ETime, 25Free.DQ AS DQ, 25Free.Lane AS Lane, 25Free.25FreeEventID AS EventID" .
 																				" FROM 25FreeMeets INNER JOIN 25Free ON 25Free.25FreeEventID = 25FreeMeets.25FreeEID" .
 																				" INNER JOIN 25FreeSwimmers ON 25FreeSwimmers.25FreeSwims = 25Free.25FreeEventID" .
 																				" INNER JOIN Swimmers ON Swimmers.SNID = 25FreeSwimmers.25FreeSID" .
@@ -1178,8 +1178,8 @@
 										}
 										else if($MeetName === "25Fly")
 										{
-											$event25FlySQL = null;
-											$event25FlySQL = "SELECT 25FlyMeets.OrderInMeet AS EOrder, 25Fly.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 25Fly.Time AS ETime, 25Fly.DQ AS DQ, 25Fly.Lane AS Lane" .
+											$findEventSQL = null;
+											$findEventSQL = "SELECT 25FlyMeets.OrderInMeet AS EOrder, 25Fly.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 25Fly.Time AS ETime, 25Fly.DQ AS DQ, 25Fly.Lane AS Lane, 25Fly.25FlyEventID AS EventID" .
 																				" FROM 25FlyMeets INNER JOIN 25Fly ON 25Fly.25FlyEventID = 25FlyMeets.25FlyEID" .
 																				" INNER JOIN 25FlySwimmers ON 25FlySwimmers.25FlySwims = 25Fly.25FlyEventID" .
 																				" INNER JOIN Swimmers ON Swimmers.SNID = 25FlySwimmers.25FlySID" .
@@ -1187,8 +1187,8 @@
 										}
 										else if($MeetName === "25Back")
 										{
-											$event25BackSQL = null;
-											$event25BackSQL = "SELECT 25BackMeets.OrderInMeet AS EOrder, 25Back.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 25Back.Time AS ETime, 25Back.DQ AS DQ, 25Back.Lane AS Lane" .
+											$findEventSQL = null;
+											$findEventSQL = "SELECT 25BackMeets.OrderInMeet AS EOrder, 25Back.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 25Back.Time AS ETime, 25Back.DQ AS DQ, 25Back.Lane AS Lane, 25Back.25BackEventID AS EventID" .
 																				" FROM 25BackMeets INNER JOIN 25Back ON 25Back.25BackEventID = 25BackMeets.25BackEID" .
 																				" INNER JOIN 25BackSwimmers ON 25BackSwimmers.25BackSwims = 25Back.25BackEventID" .
 																				" INNER JOIN Swimmers ON Swimmers.SNID = 25BackSwimmers.25BackSID" .
@@ -1196,8 +1196,8 @@
 										}
 										else if($MeetName === "25Breast")
 										{
-											$event25BreastSQL = null;
-											$event25BreastSQL = "SELECT 25BreastMeets.OrderInMeet AS EOrder, 25Breast.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 25Breast.Time AS ETime, 25Breast.DQ AS DQ, 25Breast.Lane AS Lane" .
+											$findEventSQL = null;
+											$findEventSQL = "SELECT 25BreastMeets.OrderInMeet AS EOrder, 25Breast.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 25Breast.Time AS ETime, 25Breast.DQ AS DQ, 25Breast.Lane AS Lane, 25Breast.25BreastEventID AS EventID" .
 																				" FROM 25BreastMeets INNER JOIN 25Breast ON 25Breast.25BreastEventID = 25BreastMeets.25BreastEID" .
 																				" INNER JOIN 25BreastSwimmers ON 25BreastSwimmers.25BreastSwims = 25Breast.25BreastEventID" .
 																				" INNER JOIN Swimmers ON Swimmers.SNID = 25BreastSwimmers.25BreastSID" .
@@ -1205,12 +1205,44 @@
 										}
 										else if($MeetName === "100IM")
 										{
-											$event100IMSQL = null;
-											$event100IMSQL = "SELECT 100IMMeets.OrderInMeet AS EOrder, 100IM.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 100IM.Time AS ETime, 100IM.DQ AS DQ, 100IM.Lane AS Lane" .
+											$findEventSQL = null;
+											$findEventSQL = "SELECT 100IMMeets.OrderInMeet AS EOrder, 100IM.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 100IM.Time AS ETime, 100IM.DQ AS DQ, 100IM.Lane AS Lane, 100IM.100IMEventID AS EventID" .
 																				" FROM 100IMMeets INNER JOIN 100IM ON 100IM.100IMEventID = 100IMMeets.100IMEID" .
 																				" INNER JOIN 100IMSwimmers ON 100IMSwimmers.100IMSwims = 100IM.100IMEventID" .
 																				" INNER JOIN Swimmers ON Swimmers.SNID = 100IMSwimmers.100IMSID" .
 																				" WHERE 100IMMeets.100IMMID = ? ";
+										}
+
+										//Prepare findEventSQL
+										$findEventstmt = $mysqli->prepare($findEventSQL);
+
+										//bind
+										$findEventstmt->bind_param("i", $_SESSION[ 'meetID' ]);
+
+										//execute
+										$findEventstmt->execute();
+
+										$findEventstmt->bind_result($eventOrder, $nameOfEvent, $firstNameOfSwimmer, $lastNameOfSwimmer, $timeOfSwimmer, $isDQ, $laneNumber, $selectedEventID);
+
+										while($findEventstmt->fetch())
+										{
+									?>
+												<tr>
+													<td><?php $eventOrder ?></td>
+													<td><?php $nameOfEvent ?></td>
+													<td><?php $firstNameOfSwimmer ?></td>
+													<td><?php $lastNameOfSwimmer ?></td>
+													<td><?php $timeOfSwimmer ?></td>
+													<td><?php $isDQ ?></td>
+													<td><?php $laneNumber ?></td>
+													<td>
+														<div class = "radio">
+															<input type="radio" name="selectSwimmerEvent" value= <?php $selectedEventID ?>>
+														</div>
+													</td>
+												</tr>
+
+									<?php
 										}
 									}
 
