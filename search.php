@@ -571,6 +571,17 @@
 		$meetEventstmt->close();
 	}
 
+	if(isset($_POST[ 'SearchEvents']))
+	{
+		if(!empty($_POST[ 'selectSwimmerEvent' ]))
+		{
+			foreach($_POST['selectSwimmerEvent'] as $swimmereventid)
+			{
+				echo $swimmereventid."</br>";
+			}
+		}
+		$_SESSION[ 'currentSelection' ] = 'Results';
+	}
 	if( isset($_POST[ 'Results' ]) )
 	{
 		$_SESSION[ 'currentSelection' ] = 'Results';
@@ -893,6 +904,10 @@
 								}
 
 							}
+							else if($_SESSION[ 'currentSelection' ] === 'Results')
+							{
+								echo "this is the results";
+							}
 						?>
 			</section>
 
@@ -1052,6 +1067,7 @@
 					else if($_SESSION[ 'currentSelection' ] === 'Events')
 					{
 						?>
+						<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
 						<table class="table table-responsive">
 							<thead>
 								<tr>
@@ -1066,7 +1082,6 @@
 								</tr>
 							</thead>
 							<tbody>
-							<form>
 
 					<?php
 						if(($_SESSION[ 'meetID' ] !== null) && ($_SESSION[ 'swimmerID' ] === null))
@@ -1218,7 +1233,7 @@
 
 										$findEventArray[] = $findEventSQL;
 
-									}
+									}//end while loop
 
 									$findMeetEventsstmt->close();
 
@@ -1248,23 +1263,20 @@
 														<td><?php echo $isDQ ?></td>
 														<td><?php echo $laneNumber ?></td>
 														<td>
-															<div class = "radio" align="center">
-																<input type="radio" name="selectSwimmerEvent" value= <?php echo $selectedEventID ?>>
+															<div class = "checkbox">
+																<input type="checkbox" style="vertical-align: middle; margin: -7px;" name="selectSwimmerEvent[]" value= <?php echo $selectedEventID ?>>
 															</div>
 														</td>
 													</tr>
 									<?php
-											}
-										}
+											}//end while loop
+										}//end foreach loop
 
 										unset($findEventArray);
 								 ?>
-								</form>
-							</tbody>
-							</table>
 
 				<?php
-						}
+			}//end meetid not null swimmerid null
 						else if(($_SESSION[ 'meetID' ] !== null)  && ($_SESSION[ 'swimmerID' ] !== null))
 						{
 							//sql to find all events that a swimmer swam in a meet
@@ -1273,7 +1285,15 @@
 						{
 							//sql to find all events that a swimmer on a team has swam
 						}
-					}
+				?>
+					</tbody>
+					</table>
+					<div class = "form-group">
+						<input type="submit" class="btn btn-default" name="SearchEvents" value="Search Selected Events">
+					</div>
+				</form>
+				<?php
+					}//end current selection === events
 
 				?>
 			<section>
