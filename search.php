@@ -91,11 +91,14 @@
 		$_SESSION[ 'eventName' ] = "None";
 
 		$_SESSION[ 'currentSelection' ] = 'Meets';
+
+		header('Location: meet.php');
 	}
 
 	if( isset($_POST[ 'Meets' ]) )
 	{
 		$_SESSION[ 'currentSelection' ] = 'Meets';
+		header('Location: meet.php');
 	}
 
 	if(isset($_POST[ 'NewMeetSubmit' ]) )
