@@ -171,6 +171,7 @@
 	if( isset($_POST[ 'Swimmers' ]) )
 	{
 		$_SESSION[ 'currentSelection' ] = 'Swimmers';
+		header('Location: swimmer.php');
 	}
 
 	if(isset($_POST[ 'AddSwimmertoTeamsubmit' ]) )
@@ -1299,13 +1300,6 @@
 					}//end current selection === events
 
 				?>
-			<section>
-				<div class="container">
-					<div class="row">
-
-					</div>
-				</div>
-			</section>
 			<!-- jQuery -->
 			<script src="js/jquery.js"></script>
 

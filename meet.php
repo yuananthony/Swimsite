@@ -115,6 +115,8 @@
 
 		$_SESSION[ 'currentSelection' ] = "Swimmers";
 
+		header('Location: swimmer.php');
+
 	}
 
   if( isset($_POST[ 'SearchAllMeets' ]) )
@@ -122,11 +124,13 @@
     //write SQL to get all meet IDs and put it into an array
 
     $_SESSION[ 'currentSelection' ] = "Swimmers";
+		header('Location: swimmer.php');
   }
 
   if( isset($_POST[ 'Swimmers' ]) )
   {
     $_SESSION[ 'currentSelection' ] = 'Swimmers';
+		header('Location: swimmer.php');
   }
 
 	if( isset($_POST[ 'Events' ]) )
