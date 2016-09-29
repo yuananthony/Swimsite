@@ -181,6 +181,8 @@
 		$_SESSION[ 'eventName' ] = "None";
 
 		$_SESSION[ 'currentSelection' ] = "Events";
+
+		header('Location: events.php');
 	}
 
 	if( isset($_POST[ 'SearchAllSwimmeres' ]) )
@@ -190,6 +192,7 @@
 	if( isset($_POST[ 'Events' ]) )
 	{
 		$_SESSION[ 'currentSelection' ] = 'Events';
+		header('Location: events.php');
 	}
 
 	if( isset($_POST[ 'Results' ]) )
