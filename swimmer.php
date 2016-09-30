@@ -166,7 +166,6 @@
 		//closing
 		$insertSwimmersFromOldToNewstmt->close();
 
-
 	}
 
 	if( isset($_POST[ 'SearchSwimmer' ]) )
@@ -185,10 +184,6 @@
 		header('Location: events.php');
 	}
 
-	if( isset($_POST[ 'SearchAllSwimmeres' ]) )
-	{
-		$_SESSION[ 'currentSelection' ] = "Events";
-	}
 	if( isset($_POST[ 'Events' ]) )
 	{
 		$_SESSION[ 'currentSelection' ] = 'Events';
