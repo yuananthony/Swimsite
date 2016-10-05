@@ -111,7 +111,6 @@
 	{
 		$teamIDToCopyFrom = $_POST[ 'AddSwimmersFromTeam' ];
 
-		echo $teamIDToCopyFrom;
 		//Finding all swimmers on a team
 		//SQL to Prepare
 		$findSwimmersSQL = null;

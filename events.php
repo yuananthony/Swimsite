@@ -352,6 +352,7 @@
 		}
 		$_SESSION[ 'currentSelection' ] = 'Results';
 	}
+
 	if( isset($_POST[ 'Results' ]) )
 	{
 		$_SESSION[ 'currentSelection' ] = 'Results';
@@ -396,7 +397,7 @@
 			<![endif]-->
 
 			<style>
-				body {background-color: grey;}
+				body {background-color: #5f9bce;}
 				p.header {padding-top: 5px;
 					color: black;}
 
@@ -551,12 +552,6 @@
 								</form>
 						<?php
 								}
-
-							}
-							else if($_SESSION[ 'currentSelection' ] === 'Results')
-							{
-								echo "this is the results";
-							}
 						?>
 			</section>
 
@@ -769,18 +764,16 @@
 										}//end foreach loop
 
 										unset($findEventArray);
-								 ?>
 
-				<?php
 			}//end meetid not null swimmerid null
-						else if(($_SESSION[ 'meetID' ] !== null)  && ($_SESSION[ 'swimmerID' ] !== null))
-						{
-							//sql to find all events that a swimmer swam in a meet
-						}
-						else if(($_SESSION[ 'meetID' ] === null) && ($_SESSION[ 'swimmerID' ] !== null))
-						{
-							//sql to find all events that a swimmer on a team has swam
-						}
+			else if(($_SESSION[ 'meetID' ] !== null)  && ($_SESSION[ 'swimmerID' ] !== null))
+			{
+				//sql to find a swimmer events in a given meet
+			}
+			else if(($_SESSION[ 'meetID' ] === null) && ($_SESSION[ 'swimmerID' ] !== null))
+			{
+				//sql to find all events that a swimmer on a team has swam
+			}
 				?>
 					</tbody>
 					</table>
