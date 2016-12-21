@@ -943,8 +943,9 @@
 																		" FROM 50FreeMeets INNER JOIN 50Free ON 50Free.50FreeEventID = 50FreeMeets.50FreeEID" .
 																		" INNER JOIN 50FreeSwimmers ON 50FreeSwimmers.50FreeSwims = 50Free.50FreeEventID" .
 																		" INNER JOIN Swimmers ON Swimmers.SNID = 50FreeSwimmers.50FreeSID" .
-																		" INNER JOIN SwimmerTeams ON SwimmerTeams.STSNID = Swimmers.SNID" .
-																		" WHERE Swimmers.SNID = ? AND SwimmerTeams.STTeamID = ?";
+																		" INNER JOIN Meets ON Meets.MeetID = 50FreeMeets.50FreeMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE Swimmers.SNID = ? AND TeamMeets.TMTeamID = ?";
 
 
 									}
@@ -955,8 +956,9 @@
 																			" FROM 100FreeMeets INNER JOIN 100Free ON 100Free.100FreeEventID = 100FreeMeets.100FreeEID" .
 																			" INNER JOIN 100FreeSwimmers ON 100FreeSwimmers.100FreeSwims = 100Free.100FreeEventID" .
 																			" INNER JOIN Swimmers ON Swimmers.SNID = 100FreeSwimmers.100FreeSID" .
-																			" INNER JOIN SwimmerTeams ON SwimmerTeams.STSNID = Swimmers.SNID" .
-																			" WHERE Swimmers.SNID = ? AND SwimmerTeams.STTeamID = ?";
+																			" INNER JOIN Meets ON Meets.MeetID = 100FreeMeets.100FreeMID" .
+																			" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																			" WHERE Swimmers.SNID = ? AND TeamMeets.TMTeamID = ?";
 									}
 									else if($MeetName === "200Free")
 									{
@@ -964,9 +966,10 @@
 										$findEventSQL = "SELECT 200FreeMeets.OrderInMeet AS EOrder, 200Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 200Free.Time AS ETime, 200Free.DQ AS DQ, 200Free.Lane AS Lane, 200Free.200FreeEventID AS EventID" .
 																			" FROM 200FreeMeets INNER JOIN 200Free ON 200Free.200FreeEventID = 200FreeMeets.200FreeEID" .
 																			" INNER JOIN 200FreeSwimmers ON 200FreeSwimmers.200FreeSwims = 200Free.200FreeEventID" .
-																		" INNER JOIN Swimmers ON Swimmers.SNID = 200FreeSwimmers.200FreeSID" .
-																		" INNER JOIN SwimmerTeams ON SwimmerTeams.STSNID = Swimmers.SNID" .
-																		" WHERE Swimmers.SNID = ? AND SwimmerTeams.STTeamID = ?";
+																	  	" INNER JOIN Swimmers ON Swimmers.SNID = 200FreeSwimmers.200FreeSID" .
+																			" INNER JOIN Meets ON Meets.MeetID = 200FreeMeets.200FreeMID" .
+																			" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																			" WHERE Swimmers.SNID = ? AND TeamMeets.TMTeamID = ?";
 								}
 								else if($MeetName === "500Free")
 								{
@@ -975,8 +978,9 @@
 																		" FROM 500FreeMeets INNER JOIN 500Free ON 500Free.500FreeEventID = 500FreeMeets.500FreeEID" .
 																		" INNER JOIN 500FreeSwimmers ON 500FreeSwimmers.500FreeSwims = 500Free.500FreeEventID" .
 																		" INNER JOIN Swimmers ON Swimmers.SNID = 500FreeSwimmers.500FreeSID" .
-																		" INNER JOIN SwimmerTeams ON SwimmerTeams.STSNID = Swimmers.SNID" .
-																		" WHERE Swimmers.SNID = ? AND SwimmerTeams.STTeamID = ?";
+																		" INNER JOIN Meets ON Meets.MeetID = 500FreeMeets.500FreeMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE Swimmers.SNID = ? AND TeamMeets.TMTeamID = ?";
 								}
 								else if($MeetName === "100Fly")
 								{
@@ -985,8 +989,9 @@
 																		" FROM 100FlyMeets INNER JOIN 100Fly ON 100Fly.100FlyEventID = 100FlyMeets.100FlyEID" .
 																		" INNER JOIN 100FlySwimmers ON 100FlySwimmers.100FlySwims = 100Fly.100FlyEventID" .
 																		" INNER JOIN Swimmers ON Swimmers.SNID = 100FlySwimmers.100FlySID" .
-																		" INNER JOIN SwimmerTeams ON SwimmerTeams.STSNID = Swimmers.SNID" .
-																		" WHERE Swimmers.SNID = ? AND SwimmerTeams.STTeamID = ?";
+																		" INNER JOIN Meets ON Meets.MeetID = 100FlyMeets.100FlyMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE Swimmers.SNID = ? AND TeamMeets.TMTeamID = ?";
 								}
 								else if($MeetName === "100Breast")
 								{
@@ -995,8 +1000,9 @@
 																		" FROM 100BreastMeets INNER JOIN 100Breast ON 100Breast.100BreastEventID = 100BreastMeets.100BreastEID" .
 																		" INNER JOIN 100BreastSwimmers ON 100BreastSwimmers.100BreastSwims = 100Breast.100BreastEventID" .
 																		" INNER JOIN Swimmers ON Swimmers.SNID = 100BreastSwimmers.100BreastSID" .
-																		" INNER JOIN SwimmerTeams ON SwimmerTeams.STSNID = Swimmers.SNID" .
-																		" WHERE Swimmers.SNID = ? AND SwimmerTeams.STTeamID = ?";
+																		" INNER JOIN Meets ON Meets.MeetID = 100BreastMeets.100BreastMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE Swimmers.SNID = ? AND TeamMeets.TMTeamID = ?";
 								}
 								else if($MeetName === "100Back")
 								{
@@ -1005,8 +1011,9 @@
 																		" FROM 100BackMeets INNER JOIN 100Back ON 100Back.100BackEventID = 100BackMeets.100BackEID" .
 																		" INNER JOIN 100BackSwimmers ON 100BackSwimmers.100BackSwims = 100Back.100BackEventID" .
 																		" INNER JOIN Swimmers ON Swimmers.SNID = 100BackSwimmers.100BackSID" .
-																		" INNER JOIN SwimmerTeams ON SwimmerTeams.STSNID = Swimmers.SNID" .
-																		" WHERE Swimmers.SNID = ? AND SwimmerTeams.STTeamID = ?";
+																		" INNER JOIN Meets ON Meets.MeetID = 100BackMeets.100BackMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE Swimmers.SNID = ? AND TeamMeets.TMTeamID = ?";
 								}
 								else if($MeetName === "200IM")
 								{
@@ -1015,8 +1022,9 @@
 																		" FROM 200IMMeets INNER JOIN 200IM ON 200IM.200IMEventID = 200IMMeets.200IMEID" .
 																		" INNER JOIN 200IMSwimmers ON 200IMSwimmers.200IMSwims = 200IM.200IMEventID" .
 																		" INNER JOIN Swimmers ON Swimmers.SNID = 200IMSwimmers.200IMSID" .
-																		" INNER JOIN SwimmerTeams ON SwimmerTeams.STSNID = Swimmers.SNID" .
-																		" WHERE Swimmers.SNID = ? AND SwimmerTeams.STTeamID = ?";
+																		" INNER JOIN Meets ON Meets.MeetID = 5200IMMeets.200IMMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE Swimmers.SNID = ? AND TeamMeets.TMTeamID = ?";
 								}
 								else if($MeetName === "25Free")
 								{
@@ -1025,8 +1033,9 @@
 																		" FROM 25FreeMeets INNER JOIN 25Free ON 25Free.25FreeEventID = 25FreeMeets.25FreeEID" .
 																		" INNER JOIN 25FreeSwimmers ON 25FreeSwimmers.25FreeSwims = 25Free.25FreeEventID" .
 																		" INNER JOIN Swimmers ON Swimmers.SNID = 25FreeSwimmers.25FreeSID" .
-																		" INNER JOIN SwimmerTeams ON SwimmerTeams.STSNID = Swimmers.SNID" .
-																		" WHERE Swimmers.SNID = ? AND SwimmerTeams.STTeamID = ?";
+																		" INNER JOIN Meets ON Meets.MeetID = 25FreeMeets.25FreeMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE Swimmers.SNID = ? AND TeamMeets.TMTeamID = ?";
 								}
 								else if($MeetName === "25Fly")
 								{
@@ -1035,8 +1044,9 @@
 																		" FROM 25FlyMeets INNER JOIN 25Fly ON 25Fly.25FlyEventID = 25FlyMeets.25FlyEID" .
 																		" INNER JOIN 25FlySwimmers ON 25FlySwimmers.25FlySwims = 25Fly.25FlyEventID" .
 																		" INNER JOIN Swimmers ON Swimmers.SNID = 25FlySwimmers.25FlySID" .
-																		" INNER JOIN SwimmerTeams ON SwimmerTeams.STSNID = Swimmers.SNID" .
-																		" WHERE Swimmers.SNID = ? AND SwimmerTeams.STTeamID = ?";
+																		" INNER JOIN Meets ON Meets.MeetID = 25FlyMeets.25FlyMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE Swimmers.SNID = ? AND TeamMeets.TMTeamID = ?";
 								}
 								else if($MeetName === "25Back")
 								{
@@ -1045,8 +1055,9 @@
 																		" FROM 25BackMeets INNER JOIN 25Back ON 25Back.25BackEventID = 25BackMeets.25BackEID" .
 																		" INNER JOIN 25BackSwimmers ON 25BackSwimmers.25BackSwims = 25Back.25BackEventID" .
 																		" INNER JOIN Swimmers ON Swimmers.SNID = 25BackSwimmers.25BackSID" .
-																		" INNER JOIN SwimmerTeams ON SwimmerTeams.STSNID = Swimmers.SNID" .
-																		" WHERE Swimmers.SNID = ? AND SwimmerTeams.STTeamID = ?";
+																		" INNER JOIN Meets ON Meets.MeetID = 25BackMeets.25BackMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE Swimmers.SNID = ? AND TeamMeets.TMTeamID = ?";
 								}
 								else if($MeetName === "25Breast")
 								{
@@ -1055,8 +1066,9 @@
 																		" FROM 25BreastMeets INNER JOIN 25Breast ON 25Breast.25BreastEventID = 25BreastMeets.25BreastEID" .
 																		" INNER JOIN 25BreastSwimmers ON 25BreastSwimmers.25BreastSwims = 25Breast.25BreastEventID" .
 																		" INNER JOIN Swimmers ON Swimmers.SNID = 25BreastSwimmers.25BreastSID" .
-																		" INNER JOIN SwimmerTeams ON SwimmerTeams.STSNID = Swimmers.SNID" .
-																		" WHERE Swimmers.SNID = ? AND SwimmerTeams.STTeamID = ?";
+																		" INNER JOIN Meets ON Meets.MeetID = 25BreastMeets.25BreastMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE Swimmers.SNID = ? AND TeamMeets.TMTeamID = ?";
 								}
 								else if($MeetName === "100IM")
 								{
@@ -1065,8 +1077,9 @@
 																		" FROM 100IMMeets INNER JOIN 100IM ON 100IM.100IMEventID = 100IMMeets.100IMEID" .
 																		" INNER JOIN 100IMSwimmers ON 100IMSwimmers.100IMSwims = 100IM.100IMEventID" .
 																		" INNER JOIN Swimmers ON Swimmers.SNID = 100IMSwimmers.100IMSID" .
-																		" INNER JOIN SwimmerTeams ON SwimmerTeams.STSNID = Swimmers.SNID" .
-																		" WHERE SwimmerTeams.STSNID = ? AND SwimmerTeams.STTeamID = ?";
+																		" INNER JOIN Meets ON Meets.MeetID = 100IMMeets.100IMMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE Swimmers.SNID = ? AND TeamMeets.TMTeamID = ?";
 								}
 
 						//store each string of sql in an array to execute later
@@ -1086,7 +1099,184 @@
 				$mIDNullAndSIDNotNull = false;
 				$mIDNullAndSIDNull = true;
 
+				//meet events
+				$findMeetEventsSQL = null;
+				$findMeetEventsSQL = "SELECT DISTINCT MeetEvents.MEEventName AS EventName" .
+															" FROM MeetEvents";
 
+				//Preparing Meet events
+				$findMeetEventsstmt = $mysqli->prepare($findMeetEventsSQL);
+
+				//Binding
+			//	$findMeetEventsstmt->bind_param("i", $_SESSION[ 'meetID' ]);
+
+				//execute
+				$findMeetEventsstmt->execute();
+
+				//bind results
+				$findMeetEventsstmt->bind_result($MeetName);
+
+				$findEventArray = [];
+
+
+				//for each of the events swam in the meet get the information on each
+						while($findMeetEventsstmt->fetch())
+						{
+						//IF NEW MEETS ARE ADDED ADD HERE
+						//write sql for EACH event and if statement to swtch between them
+						//gets
+								if($MeetName === "50Free")
+								{
+									$findEventSQL = null;
+									$findEventSQL = "SELECT 50FreeMeets.OrderInMeet AS EOrder, 50Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 50Free.Time AS ETime, 50Free.DQ AS DQ, 50Free.Lane AS Lane, 50Free.50FreeEventID AS EventID" .
+																		" FROM 50FreeMeets INNER JOIN 50Free ON 50Free.50FreeEventID = 50FreeMeets.50FreeEID" .
+																		" INNER JOIN 50FreeSwimmers ON 50FreeSwimmers.50FreeSwims = 50Free.50FreeEventID" .
+																		" INNER JOIN Swimmers ON Swimmers.SNID = 50FreeSwimmers.50FreeSID" .
+																		" INNER JOIN Meets ON Meets.MeetID = 50FreeMeets.50FreeMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE TeamMeets.TMTeamID = ?";
+
+
+									}
+									else if($MeetName === "100Free")
+									{
+										$findEventSQL = null;
+										$findEventSQL = "SELECT 100FreeMeets.OrderInMeet AS EOrder, 100Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 100Free.Time AS ETime, 100Free.DQ AS DQ, 100Free.Lane AS Lane, 100Free.100FreeEventID AS EventID" .
+																			" FROM 100FreeMeets INNER JOIN 100Free ON 100Free.100FreeEventID = 100FreeMeets.100FreeEID" .
+																			" INNER JOIN 100FreeSwimmers ON 100FreeSwimmers.100FreeSwims = 100Free.100FreeEventID" .
+																			" INNER JOIN Swimmers ON Swimmers.SNID = 100FreeSwimmers.100FreeSID" .
+																			" INNER JOIN Meets ON Meets.MeetID = 100FreeMeets.100FreeMID" .
+																			" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																			" WHERE TeamMeets.TMTeamID = ?";
+									}
+									else if($MeetName === "200Free")
+									{
+										$findEventSQL = null;
+										$findEventSQL = "SELECT 200FreeMeets.OrderInMeet AS EOrder, 200Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 200Free.Time AS ETime, 200Free.DQ AS DQ, 200Free.Lane AS Lane, 200Free.200FreeEventID AS EventID" .
+																			" FROM 200FreeMeets INNER JOIN 200Free ON 200Free.200FreeEventID = 200FreeMeets.200FreeEID" .
+																			" INNER JOIN 200FreeSwimmers ON 200FreeSwimmers.200FreeSwims = 200Free.200FreeEventID" .
+																	  	" INNER JOIN Swimmers ON Swimmers.SNID = 200FreeSwimmers.200FreeSID" .
+																			" INNER JOIN Meets ON Meets.MeetID = 200FreeMeets.200FreeMID" .
+																			" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																			" WHERE TeamMeets.TMTeamID = ?";
+								}
+								else if($MeetName === "500Free")
+								{
+									$findEventSQL = null;
+									$findEventSQL = "SELECT 500FreeMeets.OrderInMeet AS EOrder, 500Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 500Free.Time AS ETime, 500Free.DQ AS DQ, 500Free.Lane AS Lane, 500Free.500FreeEventID AS EventID" .
+																		" FROM 500FreeMeets INNER JOIN 500Free ON 500Free.500FreeEventID = 500FreeMeets.500FreeEID" .
+																		" INNER JOIN 500FreeSwimmers ON 500FreeSwimmers.500FreeSwims = 500Free.500FreeEventID" .
+																		" INNER JOIN Swimmers ON Swimmers.SNID = 500FreeSwimmers.500FreeSID" .
+																		" INNER JOIN Meets ON Meets.MeetID = 500FreeMeets.500FreeMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE TeamMeets.TMTeamID = ?";
+								}
+								else if($MeetName === "100Fly")
+								{
+									$findEventSQL = null;
+									$findEventSQL = "SELECT 100FlyMeets.OrderInMeet AS EOrder, 100Fly.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 100Fly.Time AS ETime, 100Fly.DQ AS DQ, 100Fly.Lane AS Lane, 100Fly.100FlyEventID AS EventID" .
+																		" FROM 100FlyMeets INNER JOIN 100Fly ON 100Fly.100FlyEventID = 100FlyMeets.100FlyEID" .
+																		" INNER JOIN 100FlySwimmers ON 100FlySwimmers.100FlySwims = 100Fly.100FlyEventID" .
+																		" INNER JOIN Swimmers ON Swimmers.SNID = 100FlySwimmers.100FlySID" .
+																		" INNER JOIN Meets ON Meets.MeetID = 100FlyMeets.100FlyMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE TeamMeets.TMTeamID = ?";
+								}
+								else if($MeetName === "100Breast")
+								{
+									$findEventSQL = null;
+									$findEventSQL = "SELECT 100BreastMeets.OrderInMeet AS EOrder, 100Breast.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 100Breast.Time AS ETime, 100Breast.DQ AS DQ, 100Breast.Lane AS Lane, 100Breast.100BreastEventID AS EventID" .
+																		" FROM 100BreastMeets INNER JOIN 100Breast ON 100Breast.100BreastEventID = 100BreastMeets.100BreastEID" .
+																		" INNER JOIN 100BreastSwimmers ON 100BreastSwimmers.100BreastSwims = 100Breast.100BreastEventID" .
+																		" INNER JOIN Swimmers ON Swimmers.SNID = 100BreastSwimmers.100BreastSID" .
+																		" INNER JOIN Meets ON Meets.MeetID = 100BreastMeets.100BreastMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE TeamMeets.TMTeamID = ?";
+								}
+								else if($MeetName === "100Back")
+								{
+									$findEventSQL = null;
+									$findEventSQL = "SELECT 100BackMeets.OrderInMeet AS EOrder, 100Back.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 100Back.Time AS ETime, 100Back.DQ AS DQ, 100Back.Lane AS Lane, 100Back.100BackEventID AS EventID" .
+																		" FROM 100BackMeets INNER JOIN 100Back ON 100Back.100BackEventID = 100BackMeets.100BackEID" .
+																		" INNER JOIN 100BackSwimmers ON 100BackSwimmers.100BackSwims = 100Back.100BackEventID" .
+																		" INNER JOIN Swimmers ON Swimmers.SNID = 100BackSwimmers.100BackSID" .
+																		" INNER JOIN Meets ON Meets.MeetID = 100BackMeets.100BackMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE TeamMeets.TMTeamID = ?";
+								}
+								else if($MeetName === "200IM")
+								{
+									$findEventSQL = null;
+									$findEventSQL = "SELECT 200IMMeets.OrderInMeet AS EOrder, 200IM.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 200IM.Time AS ETime, 200IM.DQ AS DQ, 200IM.Lane AS Lane, 200IM.200IMEventID AS EventID" .
+																		" FROM 200IMMeets INNER JOIN 200IM ON 200IM.200IMEventID = 200IMMeets.200IMEID" .
+																		" INNER JOIN 200IMSwimmers ON 200IMSwimmers.200IMSwims = 200IM.200IMEventID" .
+																		" INNER JOIN Swimmers ON Swimmers.SNID = 200IMSwimmers.200IMSID" .
+																		" INNER JOIN Meets ON Meets.MeetID = 5200IMMeets.200IMMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE TeamMeets.TMTeamID = ?";
+								}
+								else if($MeetName === "25Free")
+								{
+									$findEventSQL = null;
+									$findEventSQL = "SELECT 25FreeMeets.OrderInMeet AS EOrder, 25Free.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 25Free.Time AS ETime, 25Free.DQ AS DQ, 25Free.Lane AS Lane, 25Free.25FreeEventID AS EventID" .
+																		" FROM 25FreeMeets INNER JOIN 25Free ON 25Free.25FreeEventID = 25FreeMeets.25FreeEID" .
+																		" INNER JOIN 25FreeSwimmers ON 25FreeSwimmers.25FreeSwims = 25Free.25FreeEventID" .
+																		" INNER JOIN Swimmers ON Swimmers.SNID = 25FreeSwimmers.25FreeSID" .
+																		" INNER JOIN Meets ON Meets.MeetID = 25FreeMeets.25FreeMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE TeamMeets.TMTeamID = ?";
+								}
+								else if($MeetName === "25Fly")
+								{
+									$findEventSQL = null;
+									$findEventSQL = "SELECT 25FlyMeets.OrderInMeet AS EOrder, 25Fly.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 25Fly.Time AS ETime, 25Fly.DQ AS DQ, 25Fly.Lane AS Lane, 25Fly.25FlyEventID AS EventID" .
+																		" FROM 25FlyMeets INNER JOIN 25Fly ON 25Fly.25FlyEventID = 25FlyMeets.25FlyEID" .
+																		" INNER JOIN 25FlySwimmers ON 25FlySwimmers.25FlySwims = 25Fly.25FlyEventID" .
+																		" INNER JOIN Swimmers ON Swimmers.SNID = 25FlySwimmers.25FlySID" .
+																		" INNER JOIN Meets ON Meets.MeetID = 25FlyMeets.25FlyMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE TeamMeets.TMTeamID = ?";
+								}
+								else if($MeetName === "25Back")
+								{
+									$findEventSQL = null;
+									$findEventSQL = "SELECT 25BackMeets.OrderInMeet AS EOrder, 25Back.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 25Back.Time AS ETime, 25Back.DQ AS DQ, 25Back.Lane AS Lane, 25Back.25BackEventID AS EventID" .
+																		" FROM 25BackMeets INNER JOIN 25Back ON 25Back.25BackEventID = 25BackMeets.25BackEID" .
+																		" INNER JOIN 25BackSwimmers ON 25BackSwimmers.25BackSwims = 25Back.25BackEventID" .
+																		" INNER JOIN Swimmers ON Swimmers.SNID = 25BackSwimmers.25BackSID" .
+																		" INNER JOIN Meets ON Meets.MeetID = 25BackMeets.25BackMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE TeamMeets.TMTeamID = ?";
+								}
+								else if($MeetName === "25Breast")
+								{
+									$findEventSQL = null;
+									$findEventSQL = "SELECT 25BreastMeets.OrderInMeet AS EOrder, 25Breast.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 25Breast.Time AS ETime, 25Breast.DQ AS DQ, 25Breast.Lane AS Lane, 25Breast.25BreastEventID AS EventID" .
+																		" FROM 25BreastMeets INNER JOIN 25Breast ON 25Breast.25BreastEventID = 25BreastMeets.25BreastEID" .
+																		" INNER JOIN 25BreastSwimmers ON 25BreastSwimmers.25BreastSwims = 25Breast.25BreastEventID" .
+																		" INNER JOIN Swimmers ON Swimmers.SNID = 25BreastSwimmers.25BreastSID" .
+																		" INNER JOIN Meets ON Meets.MeetID = 25BreastMeets.25BreastMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE TeamMeets.TMTeamID = ?";
+								}
+								else if($MeetName === "100IM")
+								{
+									$findEventSQL = null;
+									$findEventSQL = "SELECT 100IMMeets.OrderInMeet AS EOrder, 100IM.Name AS EventName, Swimmers.SFName AS FirstName, Swimmers.SLName AS LastName, 100IM.Time AS ETime, 100IM.DQ AS DQ, 100IM.Lane AS Lane, 100IM.100IMEventID AS EventID" .
+																		" FROM 100IMMeets INNER JOIN 100IM ON 100IM.100IMEventID = 100IMMeets.100IMEID" .
+																		" INNER JOIN 100IMSwimmers ON 100IMSwimmers.100IMSwims = 100IM.100IMEventID" .
+																		" INNER JOIN Swimmers ON Swimmers.SNID = 100IMSwimmers.100IMSID" .
+																		" INNER JOIN Meets ON Meets.MeetID = 100IMMeets.100IMMID" .
+																		" INNER JOIN TeamMeets ON TeamMeets.TMMeetID = Meets.MeetID" .
+																		" WHERE TeamMeets.TMTeamID = ?";
+								}
+
+						//store each string of sql in an array to execute later
+						$findEventArray[] = $findEventSQL;
+
+					}//end while loop
+
+					$findMeetEventsstmt->close();
 			}
 
 			//results of the sql to be printed out
@@ -1112,7 +1302,7 @@
 				}
 				else if($mIDNullAndSIDNull)
 				{
-
+						$findEventstmt->bind_param("i", $_SESSION[ 'teamID' ]);
 				}
 				//execute
 				$findEventstmt->execute();
