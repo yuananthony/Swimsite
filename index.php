@@ -13,6 +13,7 @@
 	$usernameMatch = null;
 	$isPassMatch = null;
 
+//blowfish
 	function cryptPass($input, $rounds = 14)
 	{
 		$salt = "";
@@ -53,15 +54,18 @@
 		}
 	}
 
-//may want to validate email and make sure only one is used/unique(not sure what to do yet)
-//may help later
-//fixed problem with $_POST used ' for variables because none of them are defined as global variables and changed the name in input to be just the rusername and stuff
+//may want to get an email later for security
+//may want to validate email and make sure only one is used/unique
+
+//check if user is trying to register
 if( isset($_POST[ 'rsubmit' ]) )
 {
+	//check if username and password are entered
 	if( ( isset( $_POST[ 'ruser_Name' ] ) && !empty($_POST[ 'ruser_Name' ]) ) &&
 			( isset( $_POST[ 'r_Password' ] ) && !empty($_POST[ 'r_Password' ]) )
 		)
 			{
+				//checks if the first and second passwords match
 				if(	strcmp($_POST[ 'c_Password' ], $_POST[ 'r_Password' ]) === 0)
 				{
 
@@ -69,6 +73,7 @@ if( isset($_POST[ 'rsubmit' ]) )
 					$r_Password = $_POST[ 'r_Password' ];
 					//	$remail = $_POST[ 'remail' ];
 
+					//sql to check if username is available
 					$rsql = null;
 					$rsql =  "SELECT Users.Username AS Usernames" .
 							" FROM Users" .
@@ -96,7 +101,7 @@ if( isset($_POST[ 'rsubmit' ]) )
 					//free results
 					$rstmt->free_result();
 
-					//checks if the sql returns anything
+					//checks if username is available and adds new user to table
 					if($isUsernameAvailable)
 					{
 						$hasedPass = cryptPass($r_Password);
@@ -120,6 +125,7 @@ if( isset($_POST[ 'rsubmit' ]) )
 						$isAccountCreated = TRUE;
 					}
 				}
+				//The first and second passwords do not match
 				else
 				{
 						$isPassMatch = FALSE;
@@ -128,16 +134,18 @@ if( isset($_POST[ 'rsubmit' ]) )
 
 }
 
+//checks if user is trying to log in to account
 if( isset($_POST[ 'lsubmit' ]) )
 {
+	//checks for both username and password to be entered
 	if( ( isset( $_POST[ 'user_Name' ] ) && !empty($_POST[ 'user_Name' ]) ) &&
 		( isset( $_POST[ 'password' ] ) && !empty($_POST[ 'password' ]) ) )
 		{
 			$user_Name = $_POST[ 'user_Name' ];
 			$password = $_POST[ 'password' ];
 
+			//gets the hased password that is in the database for this user
 			//SQL to Prepare
-
 			$sql = null;
 			$sql = 'SELECT Users.Password AS Password' .
 					' FROM Users' .
@@ -166,13 +174,11 @@ if( isset($_POST[ 'lsubmit' ]) )
 				while($stmt->fetch())
 				{
 
-					//checking password
+					//checking password match and if matches then log in
 					if(crypt($password, $pwresults) === $pwresults)
 					{
-						//get UID for later sql
-
+						//get UID for later
 						//SQL to Prepare
-
 						$uidsql = null;
 						$uidsql = 'SELECT Users.UID AS UserID' .
 									' FROM Users' .
@@ -194,6 +200,8 @@ if( isset($_POST[ 'lsubmit' ]) )
 						//store results to get properties
 						$uidstmt->store_result();
 
+						//sets all the variables to the initial settings
+						//everything is set to null and first page to start in is Teams
 						while($uidstmt->fetch())
 						{
 							$_SESSION[ 'user' ] = $uidresults;
@@ -212,20 +220,19 @@ if( isset($_POST[ 'lsubmit' ]) )
 						header('Location: search.php');
 
 						$passwordMatch = TRUE;
-						//echo "Loged in as " . $_SESSION[ 'user' ];
 					}
+					//password entered does not match with one in database
 					else
 					{
 						$passwordMatch = FALSE;
-						//echo "Password does not match";
 					}
 				}
 
 			}
+			//username entered does not exist in database
 			else
 			{
 				$usernameMatch = FALSE;
-				//echo "This username does not exist please try again";
 			}
 
 			$stmt->free_result();
@@ -318,6 +325,8 @@ if( isset($_POST[ 'lsubmit' ]) )
         </div>
     </header>
 
+
+<!-- This section is used to create a new account -->
 	<section class="bg-primary" id="register">
         <div class="container">
             <div class="row">
@@ -380,6 +389,8 @@ if( isset($_POST[ 'lsubmit' ]) )
         </div>
     </section>
 
+
+<!-- This is the section to login -->
 	<section class="bg-primary" id="login">
         <div class="container">
             <div class="row">

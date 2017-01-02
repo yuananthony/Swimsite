@@ -4,13 +4,7 @@
 	define( 'DB_USER',   'root' );
 	define( 'DB_PW',	 'root' );
 	define( 'DB_NAME',   'swimming' );
-	/*NOTES TO SELF:
-		Use $_SESSION variables to avoid variables changing
-		After a post method whole page refreshes so if variables are initialized as null and changed
-		they will be set back to null after the POST method.
 
-		Only add swimmers to teams and not meets (need to get rid of later)
-	*/
 	session_start();
 
 	//DB Connection
@@ -46,8 +40,6 @@
 
 	if( isset($_POST[ 'Teams' ]) )
 	{
-		//works now need to create variables and for teams and stuff (for now just single condition and all)
-
 		$_SESSION[ 'currentSelection' ] = 'Teams';
     header('Location: search.php');
 	}
@@ -254,7 +246,6 @@
 						<span class="icon-bar"></span>
 					</button>
 					<a class="navbar-brand page-scroll" href="logout.php">LogOut</a>
-					<!--<input type="submit" name="logout" class="navbar-brand page-scroll" value="LogOut">-->
 				</div>
 
 				<!-- Collect the nav links, forms, and other content for toggling -->
@@ -349,7 +340,7 @@
 												<label for="selTeam">Select team to copy swimmers from:</label>
 												<select class="form-control" id="selTeam" name="AddSwimmersFromTeam">
 													<?php
-
+														//Find all teams that the user is the coach of
 														//SQL to Prepare
 														$teamNamesSQL = null;
 														$teamNamesSQL = "SELECT Team.Name AS Team_Name, Team.TeamID AS Team_ID" .
@@ -401,6 +392,7 @@
 									<label for="selSwimmer">Select swimmer to search from:</label>
 										<select class="form-control" id="selSwimmer" name="SelectSwimmer">
 				<?php
+										//Find all swimmers on a team
 										//SQL to Prepare
 										$swimmersNamesSQL = null;
 										$swimmersNamesSQL = "SELECT Swimmers.SFName AS SwimmerFirstName, Swimmers.SLName AS SwimmerLastName, Swimmers.SNID AS SwimmerID" .
