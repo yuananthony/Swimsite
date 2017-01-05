@@ -334,6 +334,20 @@
 		$meetEventstmt->close();
 	}
 
+	if(isset($_POST[ 'AddRelayEvent' ]))
+	{
+		$meetToCreate = $_POST[ 'selectRelayEvent' ];
+		$orderInMeet = $_POST[ 'newRelayEventOrder'];
+		$laneToAdd = $_POST[ 'newRelayEventLane' ];
+		$firstSwimmerIDToSwim = $_POST[ 'selectFirstSwimmerForEvent' ];
+		$secondSwimmerIDToSwim = $_POST[ 'selectSecondSwimmerForEvent' ];
+		$thirdSwimmerIDToSwim = $_POST[ 'selectThirdSwimmerForEvent' ];
+		$fourthSwimmerIDToSwim = $_POST[ 'selectFourthSwimmerForEvent' ];
+		$eventName = null;
+
+		//still need to finish
+	}
+
 	if(isset($_POST[ 'SearchEvents']))
 	{
 		if(!empty($_POST[ 'selectSwimmerEvent' ]))
@@ -477,7 +491,7 @@
 								else
 								{
 						?>
-								<p>Add what event and lane a swimmer will be swimming in</p>
+								<p>Add what individual event and lane an swimmer will be swimming in</p>
 								<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
 									<div class = "form-group">
 										<label for="selEvent">Select event:</label>
@@ -539,6 +553,7 @@
 												//may want to have a button for all swimmers to search
 											?>
 										</select>
+									</div>
 									<div class = "form-group">
 										<input type="submit" name="AddEvent" class="btn btn-default" value="Add Event">
 									</div>
@@ -546,6 +561,170 @@
 						<?php
 								}
 						?>
+
+						<br>
+						<hr>
+						<p>Please select a relay event and swimmers for the event </p>
+
+						<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
+							<div class = "form-group">
+								<label for="selEvent">Select event:</label>
+								<select class="form-control" id="selEvent" name="selectRelayEvent">
+									<!--IF NEW MEETS ARE ADDED ADD HERE-->
+									<option value = "50Free"> 100 Free Relay</option>
+									<option value = "100Free"> 200 Free Relay</option>
+									<option value = "200Free"> 400 Free Relay</option>
+									<option value = "500Free"> 200 Medly Relay</option>
+								</select>
+							</div>
+							<div class = "form-group">
+								<label for"selOrder">Order In Meet</label>
+								<input type = "number" class = "form-control" id = "selOrder" name = "newRelayEventOrder">
+							</div>
+							<div class = "form-group">
+								<label for="selLane">Select lane:</label>
+								<input type="number" class="form-control" id="selLane" name = "newRelayEventLane" min = "1" max = "12">
+							</div>
+							<div class = "form-group">
+								<label for="selSwimmerForEvent">Select first swimmer:</label>
+								<select class="form-control" id="selSwimmerForEvent" name="selectFirstSwimmerForEvent">
+									<?php
+										//find all swimmers on the team
+										//SQL to Prepare
+										$swimmersNamesSQL = null;
+										$swimmersNamesSQL = "SELECT Swimmers.SFName AS SwimmerFirstName, Swimmers.SLName AS SwimmerLastName, Swimmers.SNID AS SwimmerID" .
+																				" FROM Swimmers INNER JOIN SwimmerTeams ON Swimmers.SNID = SwimmerTeams.STSNID" .
+																				" WHERE SwimmerTeams.STTeamID = ?";
+
+										//Preparing
+										$swimmerNamesstmt = $mysqli->prepare($swimmersNamesSQL);
+
+										//Binding Parameter
+										$swimmerNamesstmt->bind_param("i", $_SESSION[ 'teamID' ]);
+
+										//execute
+										$swimmerNamesstmt->execute();
+
+										//iterating over results
+										$swimmerNamesstmt->bind_result($returnedSwimmerFirstName, $returnedSwimmerLastName, $returnedSwimmerID);
+
+										while($swimmerNamesstmt->fetch())
+										{
+											echo "<option value=$returnedSwimmerID> $returnedSwimmerFirstName$returnedSwimmerLastName </option>";
+										}
+
+										$swimmerNamesstmt->close();
+
+										//may want to have a button for all swimmers to search
+									?>
+								</select>
+							</div>
+							<div class = "form-group">
+								<label for="selSwimmerForEvent">Select second swimmer:</label>
+								<select class="form-control" id="selSwimmerForEvent" name="selectSecondSwimmerForEvent">
+									<?php
+										//find all swimmers on the team
+										//SQL to Prepare
+										$swimmersNamesSQL = null;
+										$swimmersNamesSQL = "SELECT Swimmers.SFName AS SwimmerFirstName, Swimmers.SLName AS SwimmerLastName, Swimmers.SNID AS SwimmerID" .
+																				" FROM Swimmers INNER JOIN SwimmerTeams ON Swimmers.SNID = SwimmerTeams.STSNID" .
+																				" WHERE SwimmerTeams.STTeamID = ?";
+
+										//Preparing
+										$swimmerNamesstmt = $mysqli->prepare($swimmersNamesSQL);
+
+										//Binding Parameter
+										$swimmerNamesstmt->bind_param("i", $_SESSION[ 'teamID' ]);
+
+										//execute
+										$swimmerNamesstmt->execute();
+
+										//iterating over results
+										$swimmerNamesstmt->bind_result($returnedSwimmerFirstName, $returnedSwimmerLastName, $returnedSwimmerID);
+
+										while($swimmerNamesstmt->fetch())
+										{
+											echo "<option value=$returnedSwimmerID> $returnedSwimmerFirstName$returnedSwimmerLastName </option>";
+										}
+
+										$swimmerNamesstmt->close();
+
+										//may want to have a button for all swimmers to search
+									?>
+								</select>
+							</div>
+							<div class = "form-group">
+								<label for="selSwimmerForEvent">Select thrid swimmer:</label>
+								<select class="form-control" id="selSwimmerForEvent" name="selectThirdSwimmerForEvent">
+									<?php
+										//find all swimmers on the team
+										//SQL to Prepare
+										$swimmersNamesSQL = null;
+										$swimmersNamesSQL = "SELECT Swimmers.SFName AS SwimmerFirstName, Swimmers.SLName AS SwimmerLastName, Swimmers.SNID AS SwimmerID" .
+																				" FROM Swimmers INNER JOIN SwimmerTeams ON Swimmers.SNID = SwimmerTeams.STSNID" .
+																				" WHERE SwimmerTeams.STTeamID = ?";
+
+										//Preparing
+										$swimmerNamesstmt = $mysqli->prepare($swimmersNamesSQL);
+
+										//Binding Parameter
+										$swimmerNamesstmt->bind_param("i", $_SESSION[ 'teamID' ]);
+
+										//execute
+										$swimmerNamesstmt->execute();
+
+										//iterating over results
+										$swimmerNamesstmt->bind_result($returnedSwimmerFirstName, $returnedSwimmerLastName, $returnedSwimmerID);
+
+										while($swimmerNamesstmt->fetch())
+										{
+											echo "<option value=$returnedSwimmerID> $returnedSwimmerFirstName$returnedSwimmerLastName </option>";
+										}
+
+										$swimmerNamesstmt->close();
+
+										//may want to have a button for all swimmers to search
+									?>
+								</select>
+							</div>
+							<div class = "form-group">
+								<label for="selSwimmerForEvent">Select fourth swimmer:</label>
+								<select class="form-control" id="selSwimmerForEvent" name="selectFourthSwimmerForEvent">
+									<?php
+										//find all swimmers on the team
+										//SQL to Prepare
+										$swimmersNamesSQL = null;
+										$swimmersNamesSQL = "SELECT Swimmers.SFName AS SwimmerFirstName, Swimmers.SLName AS SwimmerLastName, Swimmers.SNID AS SwimmerID" .
+																				" FROM Swimmers INNER JOIN SwimmerTeams ON Swimmers.SNID = SwimmerTeams.STSNID" .
+																				" WHERE SwimmerTeams.STTeamID = ?";
+
+										//Preparing
+										$swimmerNamesstmt = $mysqli->prepare($swimmersNamesSQL);
+
+										//Binding Parameter
+										$swimmerNamesstmt->bind_param("i", $_SESSION[ 'teamID' ]);
+
+										//execute
+										$swimmerNamesstmt->execute();
+
+										//iterating over results
+										$swimmerNamesstmt->bind_result($returnedSwimmerFirstName, $returnedSwimmerLastName, $returnedSwimmerID);
+
+										while($swimmerNamesstmt->fetch())
+										{
+											echo "<option value=$returnedSwimmerID> $returnedSwimmerFirstName$returnedSwimmerLastName </option>";
+										}
+
+										$swimmerNamesstmt->close();
+
+										//may want to have a button for all swimmers to search
+									?>
+								</select>
+							</div>
+							<div class = "form-group">
+								<input type="submit" name="AddRelayEvent" class="btn btn-default" value="Add Relay Event">
+							</div>
+						</form>
 			</section>
 
 			<!--END OF ADD SECTION-->

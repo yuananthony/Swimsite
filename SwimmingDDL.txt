@@ -68,7 +68,7 @@ CREATE TABLE TeamMeets
 CREATE TABLE 50Free
 (
 	50FreeEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
+	Time int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -80,9 +80,9 @@ CREATE TABLE 50Free
 CREATE TABLE 100Free
 (
 	100FreeEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
-	SplitTime50 TIME(3),
-	SplitTime100 TIME(3),
+	Time int,
+	SplitTime50 int,
+	SplitTime100 int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -94,11 +94,11 @@ CREATE TABLE 100Free
 CREATE TABLE 200Free
 (
 	200FreeEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
-	SplitTime50 TIME(3),
-	SplitTime100 TIME(3),
-	SplitTime150 TIME(3),
-	SplitTime200 TIME(3),
+	Time int,
+	SplitTime50 int,
+	SplitTime100 int,
+	SplitTime150 int,
+	SplitTime200 int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -110,17 +110,17 @@ CREATE TABLE 200Free
 CREATE TABLE 500Free
 (
 	500FreeEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
-	SplitTime50 TIME(3),
-	SplitTime100 TIME(3),
-	SplitTime150 TIME(3),
-	SplitTime200 TIME(3),
-	SplitTime250 TIME(3),
-	SplitTime300 TIME(3),
-	SplitTime350 TIME(3),
-	SplitTime400 TIME(3),
-	SpiitTime450 TIME(3),
-	SplitTime500 TIME(3),
+	Time int,
+	SplitTime50 int,
+	SplitTime100 int,
+	SplitTime150 int,
+	SplitTime200 int,
+	SplitTime250 int,
+	SplitTime300 int,
+	SplitTime350 int,
+	SplitTime400 int,
+	SpiitTime450 int,
+	SplitTime500 int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -132,9 +132,9 @@ CREATE TABLE 500Free
 CREATE TABLE 100Fly
 (
 	100FlyEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
-	SplitTime50 TIME(3),
-	SplitTime100 TIME(3),
+	Time int,
+	SplitTime50 int,
+	SplitTime100 int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -146,9 +146,9 @@ CREATE TABLE 100Fly
 CREATE TABLE 100Breast
 (
 	100BreastEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
-	SplitTime50 TIME(3),
-	SplitTime100 TIME(3),
+	Time int,
+	SplitTime50 int,
+	SplitTime100 int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -160,9 +160,9 @@ CREATE TABLE 100Breast
 CREATE TABLE 100Back
 (
 	100BackEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
-	SplitTime50 TIME(3),
-	SplitTime100 TIME(3),
+	Time int,
+	SplitTime50 int,
+	SplitTime100 int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -174,11 +174,11 @@ CREATE TABLE 100Back
 CREATE TABLE 200FreeRelay
 (
 	200FreeRelayEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
-	FirstPersonTime50 TIME(3),
-	SecondPersonTime100 TIME(3),
-	ThirdTime150 TIME(3),
-	FourthTime200 TIME(3),
+	Time int,
+	FirstPersonTime50 int,
+	SecondPersonTime100 int,
+	ThirdTime150 int,
+	FourthTime200 int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -190,15 +190,15 @@ CREATE TABLE 200FreeRelay
 CREATE TABLE 400FreeRelay
 (
 	400FreeRelayEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
-	FirstPersonTime50 TIME(3),
-	FirstPersonTime100 TIME(3),
-	SecondTime150 TIME(3),
-	SecondTime200 TIME(3),
-	ThirdTime250 TIME(3),
-	ThirdTime300 TIME(3),
-	FourthTime350 TIME(3),
-	FourthTime400 TIME(3),
+	Time int,
+	FirstPersonTime50 int,
+	FirstPersonTime100 int,
+	SecondTime150 int,
+	SecondTime200 int,
+	ThirdTime250 int,
+	ThirdTime300 int,
+	FourthTime350 int,
+	FourthTime400 int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -210,11 +210,11 @@ CREATE TABLE 400FreeRelay
 CREATE TABLE 200IM
 (
 	200IMEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
-	ButterTime TIME(3),
-	BackTime TIME(3),
-	BrestTime TIME(3),
-	FreeTime TIME(3),
+	Time int,
+	ButterTime int,
+	BackTime int,
+	BrestTime int,
+	FreeTime int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -226,11 +226,11 @@ CREATE TABLE 200IM
 CREATE TABLE 200IMRelay
 (
 	200IMRelayEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
-	ButterTime TIME(3),
-	BackTime TIME(3),
-	BrestTime TIME(3),
-	FreeTime TIME(3),
+	Time int,
+	ButterTime int,
+	BackTime int,
+	BrestTime int,
+	FreeTime int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -244,7 +244,7 @@ CREATE TABLE 200IMRelay
 CREATE TABLE 25Free
 (
 	25FreeEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
+	Time int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -256,7 +256,7 @@ CREATE TABLE 25Free
 CREATE TABLE 25Fly
 (
 	25FlyEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
+	Time int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -268,7 +268,7 @@ CREATE TABLE 25Fly
 CREATE TABLE 25Back
 (
 	25BackEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
+	Time int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -280,7 +280,7 @@ CREATE TABLE 25Back
 CREATE TABLE 25Breast
 (
 	25BreastEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
+	Time int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -292,11 +292,11 @@ CREATE TABLE 25Breast
 CREATE TABLE 100FreeRelay
 (
 	100FreeRelayEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
-	FirstPersonTime25 TIME(3),
-	SecondPersonTime50 TIME(3),
-	ThirdPersonTime75 TIME(3),
-	FourthPersonTime100 TIME(3),
+	Time int,
+	FirstPersonTime25 int,
+	SecondPersonTime50 int,
+	ThirdPersonTime75 int,
+	FourthPersonTime100 int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
@@ -309,11 +309,11 @@ CREATE TABLE 100FreeRelay
 CREATE TABLE 100IM
 (
 	100IMEventID int NOT NULL AUTO_INCREMENT,
-	Time TIME(3),
-	ButterTime TIME(3),
-	BackTime TIME(3),
-	BrestTime TIME(3),
-	FreeTime TIME(3),
+	Time int,
+	ButterTime int,
+	BackTime int,
+	BrestTime int,
+	FreeTime int,
 	DQ boolean,
 	Reason varchar (100),
 	Lane int,
