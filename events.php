@@ -345,7 +345,130 @@
 		$fourthSwimmerIDToSwim = $_POST[ 'selectFourthSwimmerForEvent' ];
 		$eventName = null;
 
-		//still need to finish
+		$newRelayEventSQL = null;
+
+		if($meetToCreate === "100FreeRelay" )
+		{
+			$newRelayEventSQL = "INSERT INTO 100FreeRelay (Lane, Name)" .
+											" Values ( ? , ? )";
+
+			$eventName = "100FreeRealy";
+		}
+		else if($meetToCreate === "200FreeRelay")
+		{
+			$newRelayEventSQL = "INSERT INTO 200FreeRelay (Lane, Name)" .
+													" Values (? , ? )";
+
+			$eventName = "200FreeRelay";
+		}
+		else if($meetToCreate === "400FreeRelay")
+		{
+				$newRelayEventSQL = "INSERT INTO 400FreeRelay (Lane, Name)" .
+														" Values ( ? , ? )";
+
+				$eventName = "400FreeRelay";
+		}
+		else if($meetToCreate === "200MedlyRelay")
+		{
+				$newRelayEventSQL = "INSERT INTO 200MedlyRelay (Lane, Name)" .
+														" Values ( ? , ? )";
+
+				$eventName = "200MedlyRelay";
+		}
+
+		//Preparing
+		$newRelayEventstmt = $mysqli->prepare($newRelayEventSQL);
+
+		//binding parameter
+		$newRelayEventstmt->bind_param("is", $laneToAdd, $eventName);
+
+		//execute
+		$newEventstmt->execute();
+
+		//get the id of the event
+		$newRelayEventID = mysqli_insert_id($mysqli);
+
+		$newRelayEventstmt->close();
+
+		//SQL TO ADD SWIMMEREVENT AND EVENTMEET
+
+		$swimmerRelayEventSQL = null;
+		$eventRelayMeetSQL = null;
+
+		if($meetToCreate === "100FreeRelay")
+		{
+			$swimmerRelayEventSQL = "INSERT INTO 100FreeRelaySwimmers (First100FreeRelaySID, Second100FreeRelaySID, Third100FreeRelaySID, Fourth100FreeRelaySID, 100FreeRelaySwims)" .
+											" Values ( ? , ? , ? , ? , ? )";
+
+			$eventRelayMeetSQL = "INSERT INTO 100FreeRelayMeets (100FreeRelayEID, 100FreeRelayMID, OrderInMeet)" .
+											" Values ( ? , ? , ? )";
+		}
+		else if($meetToCreate === "200FreeRelay")
+		{
+			$swimmerRelayEventSQL = "INSERT INTO 200FreeRelaySwimmers (First200FreeRelaySID, Second200FreeRelaySID, Third200FreeRelaySID, Fourth200FreeRelaySID, 200FreeRelaySwims)" .
+															" Values ( ? , ? , ? , ? , ? )";
+
+			$eventRelayMeetSQL = "INSERT INTO 200FreeRelayMeets (200FreeRelayEID, 200FreeRelayMID, OrderInMeet)" .
+														" Values ( ? , ? , ? )";
+		}
+		else if($meetToCreate === "400FreeRelay")
+		{
+			$swimmerRelayEventSQL = "INSERT INTO 400FreeRelaySwimmers (First400FreeRelaySID, Second400FreeRelaySID, Third400FreeRelaySID, Fourth400FreeRelaySID, 400FreeRelaySwims)" .
+															" Values ( ? , ? , ? , ? , ? )";
+
+			$eventRelayMeetSQL = "INSERT INTO 400FreeRelayMeets (400FreeRelayEID, 400FreeRelayMID, OrderInMeet)" .
+														" Values ( ? , ? , ? )";
+		}
+		else if($meetToCreate === "200MedlyRelay")
+		{
+			$swimmerRelayEventSQL = "INSERT INTO 200IMRelaySwimmers (First200IMRelaySID, Second200IMRelaySID, Third200IMRelaySID, Fourth200IMRelaySID, 200IMRelaySwims)" .
+															" Values ( ? , ? , ? , ? , ? )";
+
+			$eventRelayMeetSQL = "INSERT INTO 200IMRelayMeets (200IMRelayEID, 200IMRelayMID, OrderInMeet)" .
+														" Values ( ? , ? , ? )";
+		}
+
+		//Preparing SwimmerEvent
+		$swimmerRelayEventstmt = $mysqli->prepare($swimmerRelayEventSQL);
+
+		//Binding Parameter
+		$swimmerRelayEventstmt->bind_param("iiiii", $FirstSwimmerIDToSwim, $SecondSwimmerIDToSwim, $ThirdSwimmerIDToSwim, $FourthSwimmerIDToSwim, $newRelayEventID);
+
+		//execute
+		$swimmerRelayEventstmt->execute();
+
+		//close
+		$swimmerRelayEventstmt->close();
+
+		//Preparing eventMeet
+		$eventRelayMeetstmt = $mysqli->prepare($eventRelayMeetSQL);
+
+		//Binding Parameter
+		$eventRelayMeetstmt->bind_param("iii", $newRelayEventID, $_SESSION[ 'meetID' ], $orderInMeet);
+
+		//execute
+		$eventRelayMeetstmt->execute();
+
+		//close
+		$eventRelayMeetstmt->close();
+
+		//adds the event to MeetEvents to check what events are swam in the meet
+		//SQL TO Prepare
+		$meetEventSQL = null;
+		$meetEventSQL = "INSERT IGNORE INTO MeetEvents" .
+										" Values ( ? , ? )";
+
+		//Preapring MeetEvent
+		$meetEventstmt = $mysqli->prepare($meetEventSQL);
+
+		//Binding Parameter
+		$meetEventstmt->bind_param("is", $_SESSION[ 'meetID' ], $meetToCreate);
+
+		//execute
+		$meetEventstmt->execute();
+
+		//close
+		$meetEventstmt->close();
 	}
 
 	if(isset($_POST[ 'SearchEvents']))
@@ -571,10 +694,10 @@
 								<label for="selEvent">Select event:</label>
 								<select class="form-control" id="selEvent" name="selectRelayEvent">
 									<!--IF NEW MEETS ARE ADDED ADD HERE-->
-									<option value = "50Free"> 100 Free Relay</option>
-									<option value = "100Free"> 200 Free Relay</option>
-									<option value = "200Free"> 400 Free Relay</option>
-									<option value = "500Free"> 200 Medly Relay</option>
+									<option value = "100FreeRelay"> 100 Free Relay</option>
+									<option value = "200FreeRelay"> 200 Free Relay</option>
+									<option value = "400FreeRelay"> 400 Free Relay</option>
+									<option value = "200MedlyRelay"> 200 Medly Relay</option>
 								</select>
 							</div>
 							<div class = "form-group">

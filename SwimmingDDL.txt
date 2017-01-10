@@ -1,8 +1,6 @@
 ###ADDED EMAIL ATTRIBUTE TO THE USERS TABLE AND SPLIT TIMES FOR THE EVENTS
 ###ALSO ADDED ORDER OF SWIM IN THE SWIMMEREVENTS TABLES TO KEEP TRACK OF THE SWIMERS IN RELAYS
 ###NEED TO ADD AUTO INCREMENTS AND CHANGE NAMES OF VARIABLES SO THEY ARE UNIQUE
-###SEARCH FOR "##FIX BELOW" TO GO BACK TO WHERE STOPPED
-###8/3 FINISHED MAKING A WORKING DATABASE MAY STILL NEED TO COME BACK AND FIX FEW THINGS
 
 CREATE DATABASE swimming;
 
@@ -391,21 +389,33 @@ CREATE TABLE 100BackSwimmers
 
 CREATE TABLE 200FreeRelaySwimmers
 (
-	200FreeRelaySID int,
+	First200FreeRelaySID int,
+	Second200FreeRelaySID int,
+	Third200FreeRelaySID int,
+	Fourth200FreeRelaySID int,
 	200FreeRelaySwims int,
 	SwimmerOrder int,
-	Primary Key (200FreeRelaySID, 200FreeRelaySwims),
-	CONSTRAINT 200FreeRelaySID_fk FOREIGN KEY (200FreeRelaySID) REFERENCES Swimmers (SNID),
+	Primary Key (First200FreeRelaySID, Second200FreeRelaySID, Third200FreeRelaySID, Fourth200FreeRelaySID, 200FreeRelaySwims),
+	CONSTRAINT First200FreeRelaySID_fk FOREIGN KEY (First200FreeRelaySID) REFERENCES Swimmers (SNID),
+	CONSTRAINT Second200FreeRelaySID_fk FOREIGN KEY (Second200FreeRelaySID) REFERENCES Swimmers (SNID),
+	CONSTRAINT Third200FreeRelaySID_fk FOREIGN KEY (Third200FreeRelaySID) REFERENCES Swimmers (SNID),
+	CONSTRAINT Fourth200FreeRelaySID_fk FOREIGN KEY (Fourth200FreeRelaySID) REFERENCES Swimmers (SNID),
 	CONSTRAINT 200FreeRelaySwims_fk FOREIGN KEY (200FreeRelaySwims) REFERENCES 200FreeRelay (200FreeRelayEventID)
 );
 
 CREATE TABLE 400FreeRelaySwimmers
 (
-	400FreeRelaySID int,
+	First400FreeRelaySID int,
+	Second400FreeRelaySID int,
+	Third400FreeRelaySID int,
+	Fourth400FreeRelaySID int,
 	400FreeRelaySwims int,
 	SwimmerOrder int,
-	Primary Key (400FreeRelaySID, 400FreeRelaySwims),
-	CONSTRAINT 400FreeRelaySID_fk FOREIGN KEY (400FreeRelaySID) REFERENCES Swimmers (SNID),
+	Primary Key (First400FreeRelaySID, Second400FreeRelaySID, Third400FreeRelaySID, Fourth400FreeRelaySID, 400FreeRelaySwims),
+	CONSTRAINT First400FreeRelaySID_fk FOREIGN KEY (First400FreeRelaySID) REFERENCES Swimmers (SNID),
+	CONSTRAINT Second400FreeRelaySID_fk FOREIGN KEY (Second400FreeRelaySID) REFERENCES Swimmers (SNID),
+	CONSTRAINT Third400FreeRelaySID_fk FOREIGN KEY (Third400FreeRelaySID) REFERENCES Swimmers (SNID),
+	CONSTRAINT Fourth400FreeRelaySID_fk FOREIGN KEY (Fourth400FreeRelaySID) REFERENCES Swimmers (SNID),
 	CONSTRAINT 400FreeRelaySwims_fk FOREIGN KEY (400FreeRelaySwims) REFERENCES 400FreeRelay (400FreeRelayEventID)
 );
 
@@ -420,11 +430,17 @@ CREATE TABLE 200IMSwimmers
 
 CREATE TABLE 200IMRelaySwimmers
 (
-	200IMRelaySID int,
+	First200IMRelaySID int,
+	Second200IMRelaySID int,
+	Third200IMRelaySID int,
+	Fourth200IMRelaySID int,
 	200IMRelaySwims int,
 	SwimmerOrder int,
-	Primary Key (200IMRelaySID, 200IMRelaySwims),
-	CONSTRAINT 200IMRelaySID_fk FOREIGN KEY (200IMRelaySID) REFERENCES Swimmers (SNID),
+	Primary Key (First200IMRelaySID, Second200IMRelaySID, Third200IMRelaySID, Fourth200IMRelaySID, 200IMRelaySwims),
+	CONSTRAINT First200IMRelaySID_fk FOREIGN KEY (First200IMRelaySID) REFERENCES Swimmers (SNID),
+	CONSTRAINT Second200IMRelaySID_fk FOREIGN KEY (Second200IMRelaySID) REFERENCES Swimmers (SNID),
+	CONSTRAINT Third200IMRelaySID_fk FOREIGN KEY (Third200IMRelaySID) REFERENCES Swimmers (SNID),
+	CONSTRAINT Fourth200IMRelaySID_fk FOREIGN KEY (Fourth200IMRelaySID) REFERENCES Swimmers (SNID),
 	CONSTRAINT 200IMRelaySwims_fk FOREIGN KEY (200IMRelaySwims) REFERENCES 200IMRelay (200IMRelayEventID)
 );
 
@@ -466,20 +482,32 @@ CREATE TABLE 25FlySwimmers
 
 CREATE TABLE 100FreeRelaySwimmers
 (
-	100FreeRelaySID int,
+	First100FreeRelaySID int,
+	Second100FreeRelaySID int,
+	Third100FreeRelaySID int,
+	Fourth100FreeRelaySID int,
 	100FreeRelaySwims int,
 	SwimmerOrder int,
-	Primary Key (100FreeRelaySID, 100FreeRelaySwims),
-	CONSTRAINT 100FreeRelaySID_fk FOREIGN KEY (100FreeRelaySID) REFERENCES Swimmers (SNID),
+	Primary Key (First100FreeRelaySID, Second100FreeRelaySID, Third100FreeRelaySID, Fourth100FreeRelaySID, 100FreeRelaySwims),
+	CONSTRAINT First100FreeRelaySID_fk FOREIGN KEY (First100FreeRelaySID) REFERENCES Swimmers (SNID),
+	CONSTRAINT Second100FreeRelaySID_fk FOREIGN KEY (Second100FreeRelaySID) REFERENCES Swimmers (SNID),
+	CONSTRAINT Third100FreeRelaySID_fk FOREIGN KEY (Third100FreeRelaySID) REFERENCES Swimmers (SNID),
+	CONSTRAINT Fourth100FreeRelaySID_fk FOREIGN KEY (Fourth100FreeRelaySID) REFERENCES Swimmers (SNID),
 	CONSTRAINT 100FreeRelaySwims_fk FOREIGN KEY (100FreeRelaySwims) REFERENCES 100FreeRelay (100FreeRelayEventID)
 );
 
 CREATE TABLE 100IMSwimmers
 (
-	100IMSID int,
+	First100IMSID int,
+	Second100IMSID int,
+	Third100IMSID int,
+	Fourth100IMSID int,
 	100IMSwims int,
-	Primary Key (100IMSID, 100IMSwims),
-	CONSTRAINT 100IMSID_fk FOREIGN KEY (100IMSID) REFERENCES Swimmers (SNID),
+	Primary Key (First100IMSID, Second100IMSID, Third100IMSID, Fourth100IMSID, 100IMSwims),
+	CONSTRAINT First100IMSID_fk FOREIGN KEY (First100IMSID) REFERENCES Swimmers (SNID),
+	CONSTRAINT Second100IMSID_fk FOREIGN KEY (Second100IMSID) REFERENCES Swimmers (SNID),
+	CONSTRAINT Third100IMSID_fk FOREIGN KEY (Third100IMSID) REFERENCES Swimmers (SNID),
+	CONSTRAINT Fourth100IMSID_fk FOREIGN KEY (Fourth100IMSID) REFERENCES Swimmers (SNID),
 	CONSTRAINT 100IMSwims_fk FOREIGN KEY (100IMSwims) REFERENCES 100IM (100IMEventID)
 );
 
