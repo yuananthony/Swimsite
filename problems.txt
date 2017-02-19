@@ -1,0 +1,37 @@
+This file was created to document problems that need to be fixed.
+
+MUST FIX
+
+    Create Timer page
+
+    Need to create a results page that shows more details of selected swimmers in Events page
+
+    Code Search Selected Events
+
+    Write code to make sure users are entering the required information and prompting what is required
+
+    Write code to make sure there are no collisions (add swimmer in single event twice in same meet and other checks)
+
+AESTHETICS
+
+    Put each field in their own line
+
+    Make a better looking background
+
+    Events > Select > checkbox is not centered
+
+OPTIONAL
+
+
+NOTES:
+
+    Timer page
+
+      When first clicked will ask if timing from created meet or creating meet as they time
+
+          From Created meet
+
+            Will need to select meet that they are timing before clicking.
+
+            If user wants to select from created meet will need to enter swimmer and event
+            before every time they start timing.

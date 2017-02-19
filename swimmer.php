@@ -53,6 +53,7 @@
 	if( isset($_POST[ 'Swimmers' ]) )
 	{
 		$_SESSION[ 'currentSelection' ] = 'Swimmers';
+		header('Location: swimmer.php');
 	}
 
 	if(isset($_POST[ 'AddSwimmertoTeamsubmit' ]) )
@@ -181,9 +182,10 @@
 		header('Location: events.php');
 	}
 
-	if( isset($_POST[ 'Results' ]) )
+	if( isset($_POST[ 'Timer' ]) )
 	{
-		$_SESSION[ 'currentSelection' ] = 'Results';
+		$_SESSION[ 'currentSelection' ] = 'Timer';
+		header('Location: timer.php');
 
 	}
 
@@ -283,8 +285,8 @@
 						</li>
 						<li>
 							<form method="POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
-								<button type="submit" name="Results" class="btn btn-link">
-								<p class = "header">Results</p>
+								<button type="submit" name="Timer" class="btn btn-link">
+								<p class = "header">Timer</p>
 								</button>
 							</form>
 						</li>

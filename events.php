@@ -59,6 +59,7 @@
 	if( isset($_POST[ 'Events' ]) )
 	{
 		$_SESSION[ 'currentSelection' ] = 'Events';
+		header('Location: events.php');
 	}
 
 	if(isset($_POST[ 'AddEvent' ]) )
@@ -383,7 +384,7 @@
 		$newRelayEventstmt->bind_param("is", $laneToAdd, $eventName);
 
 		//execute
-		$newEventstmt->execute();
+		$newRelayEventstmt->execute();
 
 		//get the id of the event
 		$newRelayEventID = mysqli_insert_id($mysqli);
@@ -480,13 +481,14 @@
 				echo $swimmereventid."</br>";
 			}
 		}
+		//
 		$_SESSION[ 'currentSelection' ] = 'Results';
 	}
 
-	if( isset($_POST[ 'Results' ]) )
+	if( isset($_POST[ 'Timer' ]) )
 	{
-		$_SESSION[ 'currentSelection' ] = 'Results';
-
+		$_SESSION[ 'currentSelection' ] = 'Timer';
+		header('Location: timer.php');
 	}
 
 	if(isset($_SESSION[ 'user' ]))
@@ -585,8 +587,8 @@
 						</li>
 						<li>
 							<form method="POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
-								<button type="submit" name="Results" class="btn btn-link">
-								<p class = "header">Results</p>
+								<button type="submit" name="Timer" class="btn btn-link">
+								<p class = "header">Timer</p>
 								</button>
 							</form>
 						</li>

@@ -47,76 +47,8 @@
 	if( isset($_POST[ 'Meets' ]) )
 	{
 		$_SESSION[ 'currentSelection' ] = 'Meets';
+		header('Location: meet.php');
 	}
-
-	if(isset($_POST[ 'NewMeetSubmit' ]) )
-	{
-		//sql to add new meet
-		$newmeet_Name = $_POST[ 'NewMeetName' ];
-		$newmeet_Date = $_POST[ 'NewMeetDate' ];
-
-		//SQL to Prepare
-		$newMeetSQL = null;
-		$newMeetSQL = "INSERT INTO Meets (Date, MName)" .
-						" VALUES ( ? , ? )";
-
-		//Preparing
-		$newMeetstmt = $mysqli->prepare($newMeetSQL);
-
-		//Binding Parameter
-		$newMeetstmt->bind_param("ss", $newmeet_Date, $newmeet_Name);
-
-		//execute
-		$newMeetstmt->execute();
-		//gets value of auto_increment to be used later
-		$newMeetID = mysqli_insert_id($mysqli);
-
-		$newMeetstmt->close();
-
-		//SQL to add to TeamMeets
-
-		//SQL to Prepare
-		$newTeamMeetSQL = null;
-		$newTeamMeetSQL = "INSERT INTO TeamMeets (TMTeamID, TMMeetID)" .
-							" VALUES ( ? , ? )";
-
-		//Preparing
-		$newTeamMeetstmt = $mysqli->prepare($newTeamMeetSQL);
-
-		//Binding Parameter
-		$newTeamMeetstmt->bind_param("ii" , $_SESSION[ 'teamID' ], $newMeetID);
-
-		//execute
-		$newTeamMeetstmt->execute();
-
-		$newTeamMeetstmt->close();
-
-	}
-
-	if( isset($_POST[ 'SearchMeet' ]) )
-	{
-		$meetResult = $_POST[ 'SelectMeet'];
-
-		$meetResult_explode = explode('|', $meetResult);
-
-		$_SESSION[ 'meetName' ] = $meetResult_explode[0];
-		$_SESSION[ 'meetID' ] = $meetResult_explode[1];
-		$_SESSION[ 'swimmerID' ] = null;
-		$_SESSION[ 'swimmerName' ] = "None";
-		$_SESSION[ 'eventID' ] = null;
-		$_SESSION[ 'eventName' ] = "None";
-
-		$_SESSION[ 'currentSelection' ] = "Swimmers";
-
-		header('Location: swimmer.php');
-
-	}
-
-  if( isset($_POST[ 'SearchAllMeets' ]) )
-  {
-    $_SESSION[ 'currentSelection' ] = "Swimmers";
-		header('Location: swimmer.php');
-  }
 
   if( isset($_POST[ 'Swimmers' ]) )
   {
@@ -232,7 +164,7 @@
 						</li>
 						<li>
 							<form method="POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
-								<button type="submit" name="Timer" class="btn btn-link">
+								<button type="submit" name="Results" class="btn btn-link">
 								<p class = "header">Timer</p>
 								</button>
 							</form>
@@ -252,89 +184,13 @@
 						<p class="text-left"><strong>Swimmer: <?php echo $_SESSION[ 'swimmerName' ] ?></strong></p>
 						<p class="text-left"><strong>Event: <?php echo $_SESSION[ 'eventName' ] ?></strong></p>
 
-						<?php
-								if($_SESSION[ 'teamID' ] === null)
-								{
-						?>
-									<h3> <strong>Please Select A Team Before Adding Or Searching A Meet </strong></h3>
-						<?php
-								}
-								else
-								{
-									//MAKE SURE USER CAN NOT ADD SAME NAME MEETS
-						?>
-									<p> Add new Meet:</p>
-									<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
-										<div class = "form-group">
-											<label for="meetName"> Meet Name:</label>
-											<input type="text" class="form-control" id="newMeetName" name = "NewMeetName" required maxlength = "30">
-										</div>
-										<div class = "form-group">
-											<label for="meetDate"> Meet Date:</label>
-											<input type="date" class="form-control" id="newMeetDate" name = "NewMeetDate" required>
-										</div>
-										<input type="submit" class="btn btn-default" name="NewMeetSubmit" value="Add new Meet">
-									</form>
-						<?php
-								}
-            ?>
+
 			</section>
 
 			<!--END OF ADD SECTION-->
 			<!--this is going to be the body of the page with all the results-->
 
-				<?php
-						if($_SESSION[ 'teamID' ] !== null)
-						{
-					?>
-							<br>
-							<form class = "form-inline" method = "POST" action = "<?php echo htmlentities( $_SERVER['PHP_SELF'] ); ?>">
-								<div class = "form-group">
-									<label for="selMeet">Select meet to search from:</label>
-										<select class="form-control" id="selMeet" name="SelectMeet">
-					<?php
-										//SQL to find all meets from a team
-										//SQL to Prepare
-										$meetNamesSQL = null;
-										$meetNamesSQL = "SELECT Meets.MName AS Meet_Name, Meets.MeetID AS Meet_ID" .
-														" FROM Meets INNER JOIN TeamMeets ON Meets.MeetID = TeamMeets.TMMeetID" .
-														" WHERE TMTeamID = ?";
 
-										//Preparing
-										$meetNamesstmt = $mysqli->prepare($meetNamesSQL);
-
-										//Binding Parameter
-										$meetNamesstmt->bind_param("i", $_SESSION[ 'teamID' ]);
-
-										//execute
-										$meetNamesstmt->execute();
-
-										//iterating over results
-										$meetNamesstmt->bind_result($returnedMeetNames, $returnedMeetID);
-
-										while($meetNamesstmt->fetch())
-										{
-
-											echo "<option value=$returnedMeetNames|$returnedMeetID> $returnedMeetNames </option>";
-
-										}
-
-										$meetNamesstmt->close();
-
-										//may want to have a button for all meets to search
-					?>
-										</select>
-								</div>
-										<div class = "form-group">
-											<input type="submit" name="SearchMeet" class="btn btn-default" value="Search this meet">
-										</div>
-							</form>
-
-							<input type="submit" name="SearchAllMeets" class="btn btn-default" value="Search All Meets">
-
-				<?php
-						}
-				?>
 			<!-- jQuery -->
 			<script src="js/jquery.js"></script>
 
